@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "stylelint": "stylelint .",
     "prettier": "prettier --write **/*.{js,ts,tsx,json}",
     "preview": "vite preview"
   },
@@ -25,7 +26,10 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
+    "postcss-styled-syntax": "^0.7.1",
     "prettier": "^3.5.3",
+    "stylelint": "^16.15.0",
+    "stylelint-config-standard": "^37.0.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0"
