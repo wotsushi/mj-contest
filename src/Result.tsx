@@ -1,35 +1,78 @@
+import styled from "styled-components";
+
 const Result: React.FC = () => {
   return (
-    <table>
+    <Table>
       <thead>
         <tr>
-          <th>順位</th>
-          <th>名前</th>
-          <th>合計</th>
-          <th>1回戦</th>
-          <th>2回戦</th>
-          <th>3回戦</th>
-          <th>4回戦</th>
-          <th>5回戦</th>
+          <Th>順位</Th>
+          <Th>名前</Th>
+          <Th>合計</Th>
+          <Th>1回戦</Th>
+          <Th>2回戦</Th>
+          <Th>3回戦</Th>
+          <Th>4回戦</Th>
+          <Th>5回戦</Th>
         </tr>
       </thead>
       <tbody>
         {players.map((player, i) => (
-          <tr key={player.id}>
-            <td>{i + 1}</td>
-            <td>{player.name}</td>
-            <td>0.0</td>
-            <td>0.0</td>
-            <td>0.0</td>
-            <td>0.0</td>
-            <td>0.0</td>
-            <td>0.0</td>
-          </tr>
+          <Tr key={player.id}>
+            <Rank>{i + 1}</Rank>
+            <Name>{player.name}</Name>
+            <Total>0.0</Total>
+            <Cell>0.0</Cell>
+            <Cell>0.0</Cell>
+            <Cell>0.0</Cell>
+            <Cell>0.0</Cell>
+            <Cell>0.0</Cell>
+          </Tr>
         ))}
       </tbody>
-    </table>
+    </Table>
   );
 };
+
+const Table = styled.table`
+  width: 95vw;
+  height: 95vh;
+  font-size: 1.5vw;
+  border-radius: 10px;
+`;
+
+const Th = styled.th`
+  color: #fff;
+  background-color: #356854;
+`;
+
+const Tr = styled.tr`
+  &:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  &:nth-child(odd) {
+    background-color: #fff;
+  }
+`;
+
+const Cell = styled.td`
+  color: #434343;
+`;
+
+const Rank = styled(Cell)`
+  font-weight: bold;
+`;
+
+const Name = styled(Cell)`
+  background-color: #d0e0e3;
+  border-bottom: 1px solid #f2f2f2;
+`;
+
+const Total = styled(Cell)`
+  font-weight: bold;
+  background-color: #fff2cc;
+  border-bottom: 1px solid #f8e09b;
+`;
 
 const players = [
   { id: 1, name: "そら" },
