@@ -1,6 +1,45 @@
 import styled from "styled-components";
+import { calcPoints } from "./point";
 
 const Result: React.FC = () => {
+  const nameByID = new Map(players.map(({ id, name }) => [id, name]));
+  const pointsByID = new Map(
+    contest.players.map((id) => [
+      id,
+      contest.results.map((result) => {
+        const game = result.find(({ players }) => players.includes(id));
+        if (game === undefined || game.scores === null) return null;
+        const points = calcPoints(game.scores, game.kyotaku);
+        return points[game.players.indexOf(id)];
+      }),
+    ]),
+  );
+  const rows = contest.players
+    .map((id) => {
+      const points = pointsByID.get(id);
+      return {
+        id,
+        name: nameByID.get(id),
+        total:
+          points
+            ?.filter((point) => point !== null)
+            .reduce((total, point) => point + total, 0) ?? 0,
+        points: points ?? [],
+      };
+    })
+    .sort((a, b) => (b.total ?? 0) - (a.total ?? 0))
+    .reduce<Row[]>((res, row, i) => {
+      const last = res.at(-1);
+      return res.concat([
+        {
+          ...row,
+          rank:
+            last == undefined ? 1
+            : row.total === last.total ? last.rank
+            : i + 1,
+        },
+      ]);
+    }, []);
   return (
     <Table>
       <thead>
@@ -16,21 +55,29 @@ const Result: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {players.map((player, i) => (
-          <Tr key={player.id}>
-            <Rank>{i + 1}</Rank>
-            <Name>{player.name}</Name>
-            <Total>0.0</Total>
-            <Cell>0.0</Cell>
-            <Cell>0.0</Cell>
-            <Cell>0.0</Cell>
-            <Cell>0.0</Cell>
-            <Cell>0.0</Cell>
-          </Tr>
-        ))}
+        {rows.map((row) => {
+          return (
+            <Tr key={row.id}>
+              <Rank>{row.rank}</Rank>
+              <Name>{row.name}</Name>
+              <Total>{row.total.toFixed(1)}</Total>
+              {row.points.map((point, i) => (
+                <Cell key={i}>{point?.toFixed(1)}</Cell>
+              ))}
+            </Tr>
+          );
+        })}
       </tbody>
     </Table>
   );
+};
+
+type Row = {
+  id: number;
+  rank: number;
+  name: string | undefined;
+  total: number;
+  points: (number | null)[];
 };
 
 const Table = styled.table`
@@ -92,5 +139,157 @@ const players = [
   { id: 15, name: "ころね" },
   { id: 16, name: "すいせい" },
 ];
+
+type Contest = {
+  date: string;
+  players: number[];
+  results: ({
+    table: string;
+    players: number[];
+  } & (
+    | {
+        scores: number[];
+        kyotaku: number;
+      }
+    | { scores: null; kyotaku: null }
+  ))[][];
+};
+
+const contest: Contest = {
+  date: "2025-03-22",
+  players: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  results: [
+    [
+      {
+        table: "A",
+        players: [1, 2, 7, 12],
+        scores: [25000, 30000, 10000, 35000],
+        kyotaku: 0,
+      },
+      {
+        table: "B",
+        players: [4, 5, 8, 11],
+        scores: [20000, 25000, 30000, 25000],
+        kyotaku: 0,
+      },
+      {
+        table: "C",
+        players: [9, 10, 13, 16],
+        scores: [15000, 35000, 20000, 30000],
+        kyotaku: 0,
+      },
+      {
+        table: "D",
+        players: [3, 6, 14, 15],
+        scores: [30000, 25000, 20000, 25000],
+        kyotaku: 0,
+      },
+    ],
+    [
+      {
+        table: "A",
+        players: [5, 6, 7, 9],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "B",
+        players: [1, 3, 8, 13],
+        scores: [20000, 25000, 30000, 25000],
+        kyotaku: 0,
+      },
+      {
+        table: "C",
+        players: [10, 11, 12, 14],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "D",
+        players: [2, 4, 15, 16],
+        scores: [30000, 25000, 20000, 25000],
+        kyotaku: 0,
+      },
+    ],
+    [
+      {
+        table: "A",
+        players: [7, 11, 13, 15],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "B",
+        players: [2, 6, 8, 10],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "C",
+        players: [1, 4, 9, 14],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "D",
+        players: [3, 5, 12, 16],
+        scores: null,
+        kyotaku: null,
+      },
+    ],
+    [
+      {
+        table: "A",
+        players: [4, 6, 12, 13],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "B",
+        players: [2, 3, 9, 11],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "C",
+        players: [7, 8, 14, 16],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "D",
+        players: [1, 5, 10, 15],
+        scores: null,
+        kyotaku: null,
+      },
+    ],
+    [
+      {
+        table: "A",
+        players: [1, 6, 11, 16],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "B",
+        players: [3, 4, 7, 10],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "C",
+        players: [8, 9, 12, 15],
+        scores: null,
+        kyotaku: null,
+      },
+      {
+        table: "D",
+        players: [2, 5, 13, 14],
+        scores: null,
+        kyotaku: null,
+      },
+    ],
+  ],
+};
 
 export default Result;
