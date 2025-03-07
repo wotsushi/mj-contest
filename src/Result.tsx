@@ -60,9 +60,17 @@ const Result: React.FC = () => {
             <Tr key={row.id}>
               <Rank>{row.rank}</Rank>
               <Name>{row.name}</Name>
-              <Total>{row.total.toFixed(1)}</Total>
+              <Total>
+                <NumberLabel negative={row.total < 0}>
+                  {row.total.toFixed(1)}
+                </NumberLabel>
+              </Total>
               {row.points.map((point, i) => (
-                <Cell key={i}>{point?.toFixed(1)}</Cell>
+                <NumberCell key={i}>
+                  <NumberLabel negative={(point ?? 0) < 0}>
+                    {point?.toFixed(1)}
+                  </NumberLabel>
+                </NumberCell>
               ))}
             </Tr>
           );
@@ -115,10 +123,19 @@ const Name = styled(Cell)`
   border-bottom: 1px solid #f2f2f2;
 `;
 
-const Total = styled(Cell)`
+const NumberCell = styled(Cell)<{ negative?: boolean }>`
+  text-align: right;
+`;
+
+const Total = styled(NumberCell)`
   font-weight: bold;
   background-color: #fff2cc;
   border-bottom: 1px solid #f8e09b;
+`;
+
+const NumberLabel = styled.span<{ negative?: boolean }>`
+  padding-right: 33%;
+  color: ${({ negative }) => negative && "#ff0000"};
 `;
 
 const players = [
