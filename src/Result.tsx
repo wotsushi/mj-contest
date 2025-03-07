@@ -8,7 +8,8 @@ const Result: React.FC = () => {
       id,
       contest.results.map((result) => {
         const game = result.find(({ players }) => players.includes(id));
-        if (game === undefined || game.scores === null) return null;
+        if (game === undefined) return "";
+        if (game.scores === null) return game.table;
         const points = calcPoints(game.scores, game.kyotaku);
         return points[game.players.indexOf(id)];
       }),
@@ -22,7 +23,7 @@ const Result: React.FC = () => {
         name: nameByID.get(id),
         total:
           points
-            ?.filter((point) => point !== null)
+            ?.filter((point) => typeof point === "number")
             .reduce((total, point) => point + total, 0) ?? 0,
         points: points ?? [],
       };
@@ -65,13 +66,22 @@ const Result: React.FC = () => {
                   {row.total.toFixed(1)}
                 </NumberLabel>
               </Total>
-              {row.points.map((point, i) => (
-                <NumberCell key={i}>
-                  <NumberLabel negative={(point ?? 0) < 0}>
-                    {point?.toFixed(1)}
-                  </NumberLabel>
-                </NumberCell>
-              ))}
+              {row.points.map((point, i) => {
+                if (typeof point === "string") {
+                  return (
+                    <Cell key={i}>
+                      <NumberLabel>{point}</NumberLabel>
+                    </Cell>
+                  );
+                }
+                return (
+                  <Cell key={i}>
+                    <NumberLabel negative={point < 0}>
+                      {point.toFixed(1)}
+                    </NumberLabel>
+                  </Cell>
+                );
+              })}
             </Tr>
           );
         })}
@@ -85,7 +95,7 @@ type Row = {
   rank: number;
   name: string | undefined;
   total: number;
-  points: (number | null)[];
+  points: (number | string)[];
 };
 
 const Table = styled.table`
@@ -123,19 +133,16 @@ const Name = styled(Cell)`
   border-bottom: 1px solid #f2f2f2;
 `;
 
-const NumberCell = styled(Cell)<{ negative?: boolean }>`
-  text-align: right;
-`;
-
-const Total = styled(NumberCell)`
+const Total = styled(Cell)`
   font-weight: bold;
   background-color: #fff2cc;
   border-bottom: 1px solid #f8e09b;
 `;
 
-const NumberLabel = styled.span<{ negative?: boolean }>`
+const NumberLabel = styled.div<{ negative?: boolean }>`
   padding-right: 33%;
   color: ${({ negative }) => negative && "#ff0000"};
+  text-align: right;
 `;
 
 const players = [
