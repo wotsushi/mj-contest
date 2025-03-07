@@ -48,11 +48,9 @@ const Result: React.FC = () => {
           <Th>順位</Th>
           <Th>名前</Th>
           <Th>合計</Th>
-          <Th>1回戦</Th>
-          <Th>2回戦</Th>
-          <Th>3回戦</Th>
-          <Th>4回戦</Th>
-          <Th>5回戦</Th>
+          {contest.results.map((_, i) => (
+            <Th key={i}>{i + 1}回戦</Th>
+          ))}
         </tr>
       </thead>
       <tbody>
