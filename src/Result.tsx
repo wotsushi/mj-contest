@@ -60,7 +60,7 @@ const Result: React.FC = () => {
               <Rank>{row.rank}</Rank>
               <Name>{row.name}</Name>
               <Total>
-                <NumberLabel negative={row.total < 0}>
+                <NumberLabel $negative={row.total < 0}>
                   {row.total.toFixed(1)}
                 </NumberLabel>
               </Total>
@@ -74,7 +74,7 @@ const Result: React.FC = () => {
                 }
                 return (
                   <Cell key={i}>
-                    <NumberLabel negative={point < 0}>
+                    <NumberLabel $negative={point < 0}>
                       {point.toFixed(1)}
                     </NumberLabel>
                   </Cell>
@@ -137,9 +137,9 @@ const Total = styled(Cell)`
   border-bottom: 1px solid #f8e09b;
 `;
 
-const NumberLabel = styled.div<{ negative?: boolean }>`
+const NumberLabel = styled.div<{ $negative?: boolean }>`
   padding-right: 33%;
-  color: ${({ negative }) => negative && "#ff0000"};
+  color: ${({ $negative }) => ($negative ? "#ff0000" : undefined)};
   text-align: right;
 `;
 

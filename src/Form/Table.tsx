@@ -60,7 +60,7 @@ const Table: React.FC = () => {
           <Tr>
             {points.map((point, i) => (
               <Td key={i}>
-                <NumberLabel negative={(point ?? 0) < 0}>
+                <NumberLabel $negative={(point ?? 0) < 0}>
                   {point?.toFixed(1) ?? ""}
                 </NumberLabel>
               </Td>
@@ -111,8 +111,8 @@ const Input = styled.input`
   }
 `;
 
-const NumberLabel = styled.div<{ negative?: boolean }>`
-  color: ${({ negative }) => negative && "#ff0000"};
+const NumberLabel = styled.div<{ $negative?: boolean }>`
+  color: ${({ $negative }) => ($negative ? "#ff0000" : undefined)};
 `;
 
 export default Table;
