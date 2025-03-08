@@ -10,7 +10,7 @@ const Result: React.FC = () => {
         const game = result.find(({ players }) => players.includes(id));
         if (game === undefined) return "";
         if (game.scores === null) return game.table;
-        const points = calcPoints(game.scores, game.kyotaku);
+        const points = calcPoints(game.scores);
         return points[game.players.indexOf(id)];
       }),
     ]),
@@ -165,16 +165,11 @@ const players = [
 type Contest = {
   date: string;
   players: number[];
-  results: ({
+  results: {
     table: string;
     players: number[];
-  } & (
-    | {
-        scores: number[];
-        kyotaku: number;
-      }
-    | { scores: null; kyotaku: null }
-  ))[][];
+    scores: number[] | null;
+  }[][];
 };
 
 const contest: Contest = {
@@ -186,25 +181,21 @@ const contest: Contest = {
         table: "A",
         players: [1, 2, 7, 12],
         scores: [25000, 30000, 10000, 35000],
-        kyotaku: 0,
       },
       {
         table: "B",
         players: [4, 5, 8, 11],
         scores: [20000, 25000, 30000, 25000],
-        kyotaku: 0,
       },
       {
         table: "C",
         players: [9, 10, 13, 16],
         scores: [15000, 35000, 20000, 30000],
-        kyotaku: 0,
       },
       {
         table: "D",
         players: [3, 6, 14, 15],
         scores: [30000, 25000, 20000, 25000],
-        kyotaku: 0,
       },
     ],
     [
@@ -212,25 +203,21 @@ const contest: Contest = {
         table: "A",
         players: [5, 6, 7, 9],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "B",
         players: [1, 3, 8, 13],
         scores: [20000, 25000, 30000, 25000],
-        kyotaku: 0,
       },
       {
         table: "C",
         players: [10, 11, 12, 14],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "D",
         players: [2, 4, 15, 16],
         scores: [30000, 25000, 20000, 25000],
-        kyotaku: 0,
       },
     ],
     [
@@ -238,25 +225,21 @@ const contest: Contest = {
         table: "A",
         players: [7, 11, 13, 15],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "B",
         players: [2, 6, 8, 10],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "C",
         players: [1, 4, 9, 14],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "D",
         players: [3, 5, 12, 16],
         scores: null,
-        kyotaku: null,
       },
     ],
     [
@@ -264,25 +247,21 @@ const contest: Contest = {
         table: "A",
         players: [4, 6, 12, 13],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "B",
         players: [2, 3, 9, 11],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "C",
         players: [7, 8, 14, 16],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "D",
         players: [1, 5, 10, 15],
         scores: null,
-        kyotaku: null,
       },
     ],
     [
@@ -290,25 +269,21 @@ const contest: Contest = {
         table: "A",
         players: [1, 6, 11, 16],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "B",
         players: [3, 4, 7, 10],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "C",
         players: [8, 9, 12, 15],
         scores: null,
-        kyotaku: null,
       },
       {
         table: "D",
         players: [2, 5, 13, 14],
         scores: null,
-        kyotaku: null,
       },
     ],
   ],
