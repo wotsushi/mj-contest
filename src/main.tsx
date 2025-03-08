@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { BrowserRouter, Routes } from "react-router";
 import { Route } from "react-router";
 import Result from "./Result.tsx";
+import Form from "./Form";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -12,6 +13,7 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/result" element={<Result />} />
+        <Route path="/form" element={<Form />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
