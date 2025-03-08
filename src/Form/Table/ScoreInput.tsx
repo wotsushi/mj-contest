@@ -2,17 +2,18 @@ import styled from "styled-components";
 import { useState } from "react";
 
 type Props = {
+  score: number | null;
   commit: (score: number) => void;
 };
 
-const ScoreInput: React.FC<Props> = ({ commit }) => {
-  const [score, setScore] = useState<number | null>(null);
+const ScoreInput: React.FC<Props> = ({ score, commit }) => {
+  const [draft, setDraft] = useState<number | null>(score);
   return (
     <Input
       type="number"
       placeholder="持ち点"
-      value={score ?? ""}
-      onChange={(e) => setScore(parseInt(e.target.value))}
+      value={draft ?? ""}
+      onChange={(e) => setDraft(parseInt(e.target.value))}
       onBlur={() => commit(score ?? Number.NaN)}
     />
   );

@@ -2,14 +2,17 @@ import styled from "styled-components";
 import { useState } from "react";
 import { calcPoints, totalInitialScore } from "../../point";
 import ScoreInput from "./ScoreInput";
+import { Result } from "../../contest";
 
-const Table: React.FC = () => {
-  const [scores, setScores] = useState<(number | null)[]>([
-    null,
-    null,
-    null,
-    null,
-  ]);
+type Props = {
+  nameByID: Map<number, string>;
+  result: Result;
+};
+
+const Table: React.FC<Props> = ({ nameByID, result }) => {
+  const [scores, setScores] = useState<(number | null)[]>(
+    result.scores ?? result.players.map(() => null),
+  );
   const updateScore = (i: number) => (score: number) =>
     setScores(scores.map((s, j) => (j === i ? score : s)));
 
@@ -24,17 +27,16 @@ const Table: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <Th>そら</Th>
-            <Th>ロボ子さん</Th>
-            <Th>アキロゼ</Th>
-            <Th>はあと</Th>
+            {result.players.map((id) => (
+              <Th key={id}>{nameByID.get(id) ?? ""}</Th>
+            ))}
           </tr>
         </thead>
         <tbody>
           <Tr>
-            {scores.map((_, i) => (
+            {scores.map((score, i) => (
               <Td key={i}>
-                <ScoreInput commit={updateScore(i)} />
+                <ScoreInput score={score} commit={updateScore(i)} />
               </Td>
             ))}
           </Tr>
