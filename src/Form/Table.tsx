@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { ChangeEventHandler, useState } from "react";
-import { calcPoints } from "../point";
+import { calcPoints, totalInitialScore } from "../point";
 
 const Table: React.FC = () => {
   const [scores, setScores] = useState<(number | null)[]>([
@@ -16,49 +16,56 @@ const Table: React.FC = () => {
       newScores[i] = parseInt(e.target.value, 10);
       setScores(newScores);
     };
+  const showPoints = scores.every((score) => score !== null && !isNaN(score));
   const points =
-    scores.some((score) => score === null || isNaN(score)) ?
-      scores.map(() => null)
-    : calcPoints(scores.filter((s) => s !== null));
+    showPoints ?
+      calcPoints(scores.filter((s) => s !== null))
+    : scores.map(() => null);
+  const total = scores.filter((s) => s !== null).reduce((sum, s) => sum + s, 0);
   return (
     <Root>
-      <thead>
-        <tr>
-          <Th>そら</Th>
-          <Th>ロボ子さん</Th>
-          <Th>アキロゼ</Th>
-          <Th>はあと</Th>
-        </tr>
-      </thead>
-      <tbody>
-        <Tr>
-          {scores.map((score, i) => (
-            <Td key={i}>
-              <Input
-                type="number"
-                placeholder="持ち点"
-                step="100"
-                value={score ?? ""}
-                onChange={onChangeScore(i)}
-              />
-            </Td>
-          ))}
-        </Tr>
-        <Tr>
-          {points.map((point, i) => (
-            <Td key={i}>
-              <NumberLabel negative={(point ?? 0) < 0}>
-                {point?.toFixed(1) ?? ""}
-              </NumberLabel>
-            </Td>
-          ))}
-        </Tr>
-      </tbody>
+      <table>
+        <thead>
+          <tr>
+            <Th>そら</Th>
+            <Th>ロボ子さん</Th>
+            <Th>アキロゼ</Th>
+            <Th>はあと</Th>
+          </tr>
+        </thead>
+        <tbody>
+          <Tr>
+            {scores.map((score, i) => (
+              <Td key={i}>
+                <Input
+                  type="number"
+                  placeholder="持ち点"
+                  step="100"
+                  value={score ?? ""}
+                  onChange={onChangeScore(i)}
+                />
+              </Td>
+            ))}
+          </Tr>
+          <Tr>
+            {points.map((point, i) => (
+              <Td key={i}>
+                <NumberLabel negative={(point ?? 0) < 0}>
+                  {point?.toFixed(1) ?? ""}
+                </NumberLabel>
+              </Td>
+            ))}
+          </Tr>
+        </tbody>
+      </table>
+      {showPoints && total !== totalInitialScore(scores.length) && (
+        <div>⚠️ 持ち点の合計が {total.toLocaleString()} です</div>
+      )}
     </Root>
   );
 };
 
-const Root = styled.table`
+const Root = styled.div`
   font-size: 24px;
 `;
 

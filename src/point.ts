@@ -1,7 +1,7 @@
 // https://m-league.jp/about/ の第6章 計算(収支および得点)の第2条 持ち点・順位点に準ずる
 export const calcPoints = (scores: number[]) => {
   const kyotaku =
-    initialScore * scores.length - scores.reduce((sum, s) => sum + s, 0);
+    totalInitialScore(scores.length) - scores.reduce((sum, s) => sum + s, 0);
   return scores.map((score, i) => {
     const rank = scores.filter((s) => s > score).length;
     const tie = scores.filter((s) => s === score).length;
@@ -21,6 +21,7 @@ export const calcPoints = (scores: number[]) => {
   });
 };
 
+export const totalInitialScore = (n: number) => n * initialScore;
 const distirbuteScore = (score: number, tie: number) => {
   const d = 100 * tie;
   const q = Math.trunc(score / d);
