@@ -9,13 +9,20 @@ const Table: React.FC = () => {
     null,
     null,
   ]);
+  const [draftScores, setDraftScores] = useState<(number | null)[]>([
+    null,
+    null,
+    null,
+    null,
+  ]);
   const onChangeScore =
     (i: number): ChangeEventHandler<HTMLInputElement> =>
     (e) => {
       const newScores = [...scores];
       newScores[i] = parseInt(e.target.value, 10);
-      setScores(newScores);
+      setDraftScores(newScores);
     };
+
   const showPoints = scores.every((score) => score !== null && !isNaN(score));
   const points =
     showPoints ?
@@ -35,7 +42,7 @@ const Table: React.FC = () => {
         </thead>
         <tbody>
           <Tr>
-            {scores.map((score, i) => (
+            {draftScores.map((score, i) => (
               <Td key={i}>
                 <Input
                   type="number"
@@ -43,6 +50,9 @@ const Table: React.FC = () => {
                   step="100"
                   value={score ?? ""}
                   onChange={onChangeScore(i)}
+                  onBlur={() => {
+                    setScores(draftScores);
+                  }}
                 />
               </Td>
             ))}
