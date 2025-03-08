@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { ChangeEventHandler, useState } from "react";
-import { calcPoints, totalInitialScore } from "../point";
+import { useState } from "react";
+import { calcPoints, totalInitialScore } from "../../point";
+import ScoreInput from "./ScoreInput";
 
 const Table: React.FC = () => {
   const [scores, setScores] = useState<(number | null)[]>([
@@ -9,19 +10,8 @@ const Table: React.FC = () => {
     null,
     null,
   ]);
-  const [draftScores, setDraftScores] = useState<(number | null)[]>([
-    null,
-    null,
-    null,
-    null,
-  ]);
-  const onChangeScore =
-    (i: number): ChangeEventHandler<HTMLInputElement> =>
-    (e) => {
-      const newScores = [...scores];
-      newScores[i] = parseInt(e.target.value, 10);
-      setDraftScores(newScores);
-    };
+  const updateScore = (i: number) => (score: number) =>
+    setScores(scores.map((s, j) => (j === i ? score : s)));
 
   const showPoints = scores.every((score) => score !== null && !isNaN(score));
   const points =
@@ -42,18 +32,9 @@ const Table: React.FC = () => {
         </thead>
         <tbody>
           <Tr>
-            {draftScores.map((score, i) => (
+            {scores.map((_, i) => (
               <Td key={i}>
-                <Input
-                  type="number"
-                  placeholder="持ち点"
-                  step="100"
-                  value={score ?? ""}
-                  onChange={onChangeScore(i)}
-                  onBlur={() => {
-                    setScores(draftScores);
-                  }}
-                />
+                <ScoreInput commit={updateScore(i)} />
               </Td>
             ))}
           </Tr>
@@ -95,20 +76,6 @@ const Td = styled.td`
   color: #434343;
   background-color: #fff;
   border: #f2f2f2 solid 1px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 100%;
-  font-size: 24px;
-  color: #434343;
-  text-align: center;
-  background-color: #fff;
-  border: none;
-
-  &::placeholder {
-    color: #ccc;
-  }
 `;
 
 const NumberLabel = styled.div<{ $negative?: boolean }>`
