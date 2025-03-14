@@ -6,11 +6,11 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const useDoc = <T>(id: string) => {
   const [state, setter] = useState<T | null>(null);
-  const ref = doc(db, collection, id);
+  const ref = React.useMemo(() => doc(db, collection, id), [id]);
   useEffect(() => {
     return onSnapshot(ref, (d) => {
       if (d.exists()) {
