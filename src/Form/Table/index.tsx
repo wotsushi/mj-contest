@@ -7,9 +7,10 @@ import { Result } from "../../contest";
 type Props = {
   nameByID: Map<number, string>;
   result: Result;
+  saveScores: (scores: number[]) => void;
 };
 
-const Table: React.FC<Props> = ({ nameByID, result }) => {
+const Table: React.FC<Props> = ({ nameByID, result, saveScores }) => {
   const [scores, setScores] = useState<(number | null)[]>(
     result.scores ?? result.players.map(() => null),
   );
@@ -54,6 +55,16 @@ const Table: React.FC<Props> = ({ nameByID, result }) => {
       {showPoints && total !== totalInitialScore(scores.length) && (
         <div>⚠️ 持ち点の合計が {total.toLocaleString()} です</div>
       )}
+      <button
+        type="button"
+        onClick={() => {
+          if (scores.every((score) => score !== null)) {
+            saveScores(scores);
+          }
+        }}
+      >
+        保存
+      </button>
     </Root>
   );
 };

@@ -1,17 +1,27 @@
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getFirestore,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export const useDoc = <T>(id: string) => {
   const [state, setter] = useState<T | null>(null);
+  const ref = doc(db, collection, id);
   useEffect(() => {
-    return onSnapshot(ref(id), (d) => {
+    return onSnapshot(ref, (d) => {
       if (d.exists()) {
         setter(deserialize(d.data()) as T);
       }
     });
-  }, [id]);
-  return [state, setter] as const;
+  }, [ref]);
+  const update = async (field: string, value: unknown) => {
+    updateDoc(ref, { [field]: serialize(value) });
+  };
+  return { state, setter, update };
 };
 
 export const putDoc = async <T>(id: string, data: T) => {
@@ -49,7 +59,7 @@ const deserialize = (doc: any): unknown => {
   return Object.fromEntries(keys.map((key) => [key, deserialize(doc[key])]));
 };
 
-const serialize = (data: any): unknown => {
+const serialize = (data: any): any => {
   if (
     data === null ||
     data === undefined ||

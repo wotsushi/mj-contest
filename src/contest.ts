@@ -18,14 +18,25 @@ export type Player = {
 };
 
 export const useContest = (id: string) => {
-  const [contest, setContest] = useDoc<Contest>(id);
+  const {
+    state: contest,
+    setter: setContest,
+    update: updateContest,
+  } = useDoc<Contest>(id);
   const mutateContest = (mutate: (next: Contest) => void) => {
     if (contest === null) return;
     const next = structuredClone(contest);
     mutate(next);
     setContest(next);
   };
-  return [contest, mutateContest] as const;
+  const saveScores = (round: number, table: number, scores: number[]) => {
+    updateContest(`results.${round}.${table}.scores`, scores);
+  };
+  return {
+    contest,
+    mutateContest,
+    saveScores,
+  };
 };
 
 export const saveContest = (id: string, contest: Contest) => {

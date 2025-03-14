@@ -3,7 +3,7 @@ import { saveContest, useContest } from "../contest";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [contest, mutate] = useContest(id ?? "");
+  const { contest, mutateContest: mutate } = useContest(id ?? "");
   if (id === undefined || contest === null) return null;
   return (
     <div>

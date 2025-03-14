@@ -37,7 +37,7 @@ describe("useDoc", () => {
     mockOnSnapshot.mockImplementation(snapshot(doc));
     const {
       result: {
-        current: [actual],
+        current: { state: actual },
       },
     } = renderHook(() => useDoc(""));
     expect(actual).toEqual(expected);
