@@ -14,7 +14,7 @@ const ScoreInput: React.FC<Props> = ({ score, commit }) => {
       placeholder="持ち点"
       value={draft ?? ""}
       onChange={(e) => setDraft(parseInt(e.target.value))}
-      onBlur={() => commit(score ?? Number.NaN)}
+      onBlur={() => commit(draft ?? Number.NaN)}
     />
   );
 };
