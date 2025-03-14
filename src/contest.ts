@@ -1,4 +1,4 @@
-import { putDoc, useDoc } from "./firebase";
+import { useDoc } from "./firebase";
 
 export type Contest = {
   date: string;
@@ -21,6 +21,7 @@ export const useContest = (id: string) => {
   const {
     state: contest,
     setter: setContest,
+    put: putContest,
     update: updateContest,
   } = useDoc<Contest>(id);
   const mutateContest = (mutate: (next: Contest) => void) => {
@@ -33,7 +34,7 @@ export const useContest = (id: string) => {
     updateContest(`results.${round}.${table}.scores`, scores);
   };
   const saveContest = (contest: Contest) => {
-    putDoc(id, contest);
+    putContest(contest);
     window.alert("保存しました");
   };
   return {

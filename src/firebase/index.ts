@@ -18,14 +18,14 @@ export const useDoc = <T>(id: string) => {
       }
     });
   }, [ref]);
+  const put = async <T>(data: T) => {
+    await setDoc(ref, serialize(data));
+  };
+
   const update = async (field: string, value: unknown) => {
     updateDoc(ref, { [field]: serialize(value) });
   };
-  return { state, setter, update };
-};
-
-export const putDoc = async <T>(id: string, data: T) => {
-  await setDoc(ref(id), serialize(data));
+  return { state, setter, put, update };
 };
 
 const firebaseConfig = {
@@ -39,7 +39,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const collection = process.env.NODE_ENV === "production" ? "prod" : "dev";
-const ref = (id: string) => doc(db, collection, id);
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const deserialize = (doc: any): unknown => {
