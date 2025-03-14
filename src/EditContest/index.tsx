@@ -1,9 +1,9 @@
 import { useParams } from "react-router";
-import { saveContest, useContest } from "../contest";
+import { useContest } from "../contest";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { contest, mutateContest: mutate } = useContest(id ?? "");
+  const { contest, mutateContest: mutate, saveContest } = useContest(id ?? "");
   if (id === undefined || contest === null) return null;
   return (
     <div>
@@ -66,7 +66,7 @@ const EditContest: React.FC = () => {
       >
         追加
       </button>
-      <button type="button" onClick={() => saveContest(id, contest)}>
+      <button type="button" onClick={() => saveContest(contest)}>
         保存
       </button>
     </div>

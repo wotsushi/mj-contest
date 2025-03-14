@@ -32,16 +32,16 @@ export const useContest = (id: string) => {
   const saveScores = (round: number, table: number, scores: number[]) => {
     updateContest(`results.${round}.${table}.scores`, scores);
   };
+  const saveContest = (contest: Contest) => {
+    putDoc(id, contest);
+    window.alert("保存しました");
+  };
   return {
     contest,
     mutateContest,
+    saveContest,
     saveScores,
   };
-};
-
-export const saveContest = (id: string, contest: Contest) => {
-  putDoc(id, contest);
-  window.alert("保存しました");
 };
 
 export const players: Player[] = [
