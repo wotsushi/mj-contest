@@ -1,3 +1,5 @@
+import { putDoc, useDoc } from "./firebase";
+
 export type Contest = {
   date: string;
   players: number[];
@@ -13,6 +15,22 @@ export type Result = {
 export type Player = {
   id: number;
   name: string;
+};
+
+export const useContest = (id: string) => {
+  const [contest, setContest] = useDoc<Contest>(id);
+  const mutateContest = (mutate: (next: Contest) => void) => {
+    if (contest === null) return;
+    const next = structuredClone(contest);
+    mutate(next);
+    setContest(next);
+  };
+  return [contest, mutateContest] as const;
+};
+
+export const saveContest = (id: string, contest: Contest) => {
+  putDoc(id, contest);
+  window.alert("保存しました");
 };
 
 export const players: Player[] = [

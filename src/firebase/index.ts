@@ -1,0 +1,69 @@
+import { initializeApp } from "firebase/app";
+import { doc, getFirestore, onSnapshot, setDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
+
+export const useDoc = <T>(id: string) => {
+  const [state, setter] = useState<T | null>(null);
+  useEffect(() => {
+    return onSnapshot(ref(id), (d) => {
+      if (d.exists()) {
+        setter(deserialize(d.data()) as T);
+      }
+    });
+  }, [id]);
+  return [state, setter] as const;
+};
+
+export const putDoc = async <T>(id: string, data: T) => {
+  await setDoc(ref(id), serialize(data));
+};
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDoz5GN1Ahoy4jhqIa03qzZ4G6NPwdiJBY",
+  authDomain: "mj-contest.firebaseapp.com",
+  projectId: "mj-contest",
+  storageBucket: "mj-contest.firebasestorage.app",
+  messagingSenderId: "598367005786",
+  appId: "1:598367005786:web:472eb70031347d5363fc63",
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const collection = process.env.NODE_ENV === "production" ? "prod" : "dev";
+const ref = (id: string) => doc(db, collection, id);
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const deserialize = (doc: any): unknown => {
+  if (
+    doc === null ||
+    doc === undefined ||
+    typeof doc === "number" ||
+    typeof doc === "string" ||
+    typeof doc === "boolean"
+  ) {
+    return doc;
+  }
+  const keys = Object.keys(doc);
+  if (keys.every((key) => !isNaN(Number(key)))) {
+    return keys.map((key) => deserialize(doc[key]));
+  }
+  return Object.fromEntries(keys.map((key) => [key, deserialize(doc[key])]));
+};
+
+const serialize = (data: any): unknown => {
+  if (
+    data === null ||
+    data === undefined ||
+    typeof data === "number" ||
+    typeof data === "string" ||
+    typeof data === "boolean"
+  ) {
+    return data;
+  }
+  if (Array.isArray(data)) {
+    return Object.fromEntries(data.map((x, i) => [i, serialize(x)]));
+  }
+  return Object.fromEntries(
+    Object.entries(data).map(([k, v]) => [k, serialize(v)]),
+  );
+};
+/* eslint-enable @typescript-eslint/no-explicit-any */
