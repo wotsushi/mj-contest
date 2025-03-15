@@ -18,8 +18,8 @@ export const useDoc = <T>(id: string) => {
       }
     });
   }, [ref]);
-  const put = async <T>(data: T) => {
-    await setDoc(ref, serialize(data));
+  const put = async () => {
+    await setDoc(ref, serialize(state));
   };
 
   const update = async (field: string, value: unknown) => {

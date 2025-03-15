@@ -1,6 +1,6 @@
 import { doc, DocumentReference, onSnapshot, setDoc } from "firebase/firestore";
 import { useDoc } from ".";
-import { renderHook } from "@testing-library/react";
+import { act, renderHook } from "@testing-library/react";
 
 jest.mock("firebase/app");
 jest.mock("firebase/firestore");
@@ -13,6 +13,11 @@ const snapshot = (data: unknown) =>
     })) as typeof onSnapshot;
 const mockSetDoc = jest.mocked(setDoc);
 jest.mocked(doc).mockReturnValue({} as DocumentReference);
+
+beforeEach(() => {
+  mockOnSnapshot.mockReset();
+  mockSetDoc.mockReset();
+});
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 describe("useDoc", () => {
@@ -62,12 +67,9 @@ describe("useDoc", () => {
         { name: "a", scores: { 0: 10000, 1: 20000, 2: 30000, 3: 40000 } },
       ],
     ])(`data=%p expected=%p`, (data, expected) => {
-      const {
-        result: {
-          current: { put },
-        },
-      } = renderHook(() => useDoc(""));
-      put(data);
+      const result = renderHook(() => useDoc("")).result;
+      act(() => result.current.setter(data));
+      result.current.put();
       expect(mockSetDoc).toHaveBeenLastCalledWith(expect.anything(), expected);
     });
   });
