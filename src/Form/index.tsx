@@ -28,6 +28,7 @@ const Form: React.FC = () => {
         setTable={setParam("table")}
       />
       <Table
+        key={`${round} ${table}`}
         result={result}
         setScores={(scores) =>
           mutateContest((next) => {
