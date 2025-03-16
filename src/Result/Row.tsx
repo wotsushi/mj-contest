@@ -11,7 +11,7 @@ type Props = {
 const Row: React.FC<Props> = ({ id, rank, name, total, points }) => {
   return (
     <Tr key={id}>
-      <Rank>{rank}</Rank>
+      <Rank $rank={rank}>{rank}</Rank>
       <Name>{name}</Name>
       <Total>
         <NumberLabel $negative={total < 0}>{total.toFixed(1)}</NumberLabel>
@@ -48,8 +48,9 @@ const Cell = styled.td`
   color: #434343;
 `;
 
-const Rank = styled(Cell)`
+const Rank = styled(Cell)<{ $rank: number}>`
   font-weight: bold;
+  color: ${({ $rank }) => (["#d4af37", "#a9a9a9", "#8b5a2b"].at($rank - 1))};
 `;
 
 const Name = styled(Cell)`
