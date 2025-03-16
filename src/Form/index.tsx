@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useParams, useSearchParams } from "react-router";
 import { players, useContest } from "../contest";
 import Table from "./Table";
@@ -19,7 +20,7 @@ const Form: React.FC = () => {
       return prev;
     });
   return (
-    <div>
+    <Root>
       <Selector
         contest={contest}
         round={round}
@@ -37,8 +38,15 @@ const Form: React.FC = () => {
         }
         saveScores={() => saveScores(round, table)}
       />
-    </div>
+    </Root>
   );
 };
+
+const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 32px;
+  align-items: center;
+`;
 
 export default Form;

@@ -1,6 +1,8 @@
+import styled from "styled-components";
+
 import React from "react";
 import { Contest } from "../../contest";
-import Select from "./Select";
+import Selectbox from "./Selectbox";
 
 type Props = {
   contest: Contest;
@@ -18,19 +20,24 @@ const Selector: React.FC<Props> = ({
   setTable,
 }) => {
   return (
-    <div>
-      <Select
+    <Root>
+      <Selectbox
         options={contest.results.map((_, i) => `第${i + 1}回戦`)}
         current={round}
         set={setRound}
       />
-      <Select
+      <Selectbox
         options={contest.results[round].map((t) => t.table)}
         current={table}
         set={setTable}
       />
-    </div>
+    </Root>
   );
 };
+
+const Root = styled.div`
+  display: flex;
+  column-gap: 24px;
+`;
 
 export default Selector;
