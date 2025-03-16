@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/result" element={<Result />} />
+        <Route path="/result/:id" element={<Result />} />
         <Route path="/form/:id" element={<Form />} />
         <Route path="/edit_contest/:id" element={<EditContest />} />
       </Routes>
