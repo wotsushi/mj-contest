@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { calcPoints } from "./point";
-import { useContest } from "./contest";
+import { calcPoints } from "../point";
+import { useContest } from "../contest";
 import { useParams } from "react-router";
-import { useMaster } from "./master";
+import { useMaster } from "../master";
+import Row from "./Row";
 
 const Result: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,7 +36,7 @@ const Result: React.FC = () => {
       };
     })
     .sort((a, b) => (b.total ?? 0) - (a.total ?? 0))
-    .reduce<Row[]>((res, row, i) => {
+    .reduce<React.ComponentProps<typeof Row>[]>((res, row, i) => {
       const last = res.at(-1);
       return res.concat([
         {
@@ -60,46 +61,18 @@ const Result: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {rows.map((row) => {
-          return (
-            <Tr key={row.id}>
-              <Rank>{row.rank}</Rank>
-              <Name>{row.name}</Name>
-              <Total>
-                <NumberLabel $negative={row.total < 0}>
-                  {row.total.toFixed(1)}
-                </NumberLabel>
-              </Total>
-              {row.points.map((point, i) => {
-                if (typeof point === "string") {
-                  return (
-                    <Cell key={i}>
-                      <NumberLabel>{point}</NumberLabel>
-                    </Cell>
-                  );
-                }
-                return (
-                  <Cell key={i}>
-                    <NumberLabel $negative={point < 0}>
-                      {point.toFixed(1)}
-                    </NumberLabel>
-                  </Cell>
-                );
-              })}
-            </Tr>
-          );
-        })}
+        {rows.map((row) => (
+          <Row
+            id={row.id}
+            rank={row.rank}
+            name={row.name}
+            total={row.total}
+            points={row.points}
+          />
+        ))}
       </tbody>
     </Table>
   );
-};
-
-type Row = {
-  id: number;
-  rank: number;
-  name: string | undefined;
-  total: number;
-  points: (number | string)[];
 };
 
 const Table = styled.table`
@@ -112,41 +85,6 @@ const Table = styled.table`
 const Th = styled.th`
   color: #fff;
   background-color: #356854;
-`;
-
-const Tr = styled.tr`
-  &:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  &:nth-child(odd) {
-    background-color: #fff;
-  }
-`;
-
-const Cell = styled.td`
-  color: #434343;
-`;
-
-const Rank = styled(Cell)`
-  font-weight: bold;
-`;
-
-const Name = styled(Cell)`
-  background-color: #d0e0e3;
-  border-bottom: 1px solid #f2f2f2;
-`;
-
-const Total = styled(Cell)`
-  font-weight: bold;
-  background-color: #fff2cc;
-  border-bottom: 1px solid #f8e09b;
-`;
-
-const NumberLabel = styled.div<{ $negative?: boolean }>`
-  padding-right: 33%;
-  color: ${({ $negative }) => ($negative ? "#ff0000" : undefined)};
-  text-align: right;
 `;
 
 export default Result;

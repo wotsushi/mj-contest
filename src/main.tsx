@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter, Routes } from "react-router";
 import { Route } from "react-router";
-import Result from "./Result.tsx";
+import Result from "./Result/index.tsx";
 import Form from "./Form";
 import EditContest from "./EditContest/index.tsx";
 
