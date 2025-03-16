@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useParams, useSearchParams } from "react-router";
-import { players, useContest } from "../contest";
+import { useContest } from "../contest";
 import Table from "./Table";
 import Selector from "./Selector";
 
@@ -11,7 +11,6 @@ const Form: React.FC = () => {
   const table = parseInt(params.get("table") ?? "");
   const { contest, mutateContest, saveScores } = useContest(id ?? "");
   if (contest === null || isNaN(round) || isNaN(table)) return null;
-  const nameByID = new Map(players.map(({ id, name }) => [id, name]));
   const result = contest.results.at(round)?.at(table);
   if (result === undefined) return null;
   const setParam = (key: "round" | "table") => (value: number) =>
@@ -29,7 +28,6 @@ const Form: React.FC = () => {
         setTable={setParam("table")}
       />
       <Table
-        nameByID={nameByID}
         result={result}
         setScores={(scores) =>
           mutateContest((next) => {

@@ -3,23 +3,20 @@ import { useState } from "react";
 import { calcPoints, totalInitialScore } from "../../point";
 import ScoreInput from "./ScoreInput";
 import { Result } from "../../contest";
+import { useMaster } from "../../master";
 
 type Props = {
-  nameByID: Map<number, string>;
   result: Result;
   setScores: (scores: number[] | null) => void;
   saveScores: () => void;
 };
 
-const Table: React.FC<Props> = ({
-  nameByID,
-  result,
-  setScores,
-  saveScores,
-}) => {
+const Table: React.FC<Props> = ({ result, setScores, saveScores }) => {
   const [scores, setDraftScores] = useState<(number | null)[]>(
     result.scores ?? result.players.map(() => null),
   );
+  const { nameByID } = useMaster();
+  if (nameByID === null) return null;
   const updateScore = (i: number) => (score: number) => {
     const next = scores.map((s, j) => (j === i ? score : s));
     setDraftScores(next);

@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { calcPoints } from "./point";
-import { players, useContest } from "./contest";
+import { useContest } from "./contest";
 import { useParams } from "react-router";
+import { useMaster } from "./master";
 
 const Result: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { nameByID } = useMaster();
   const { contest } = useContest(id ?? "");
-  if (contest === null) return null;
-  const nameByID = new Map(players.map(({ id, name }) => [id, name]));
+  if (nameByID === null || contest === null) return null;
   const pointsByID = new Map(
     contest.players.map((id) => [
       id,
