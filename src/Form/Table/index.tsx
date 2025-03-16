@@ -7,15 +7,26 @@ import { Result } from "../../contest";
 type Props = {
   nameByID: Map<number, string>;
   result: Result;
-  saveScores: (scores: number[]) => void;
+  setScores: (scores: number[] | null) => void;
+  saveScores: () => void;
 };
 
-const Table: React.FC<Props> = ({ nameByID, result, saveScores }) => {
-  const [scores, setScores] = useState<(number | null)[]>(
+const Table: React.FC<Props> = ({
+  nameByID,
+  result,
+  setScores,
+  saveScores,
+}) => {
+  const [scores, setDraftScores] = useState<(number | null)[]>(
     result.scores ?? result.players.map(() => null),
   );
-  const updateScore = (i: number) => (score: number) =>
-    setScores(scores.map((s, j) => (j === i ? score : s)));
+  const updateScore = (i: number) => (score: number) => {
+    const next = scores.map((s, j) => (j === i ? score : s));
+    setDraftScores(next);
+    if (next.every((score) => score !== null) && next.every((score) => !isNaN(score))) {
+      setScores(next);
+    } else setScores(null);
+  };
 
   const showPoints = scores.every((score) => score !== null && !isNaN(score));
   const points =
@@ -57,11 +68,8 @@ const Table: React.FC<Props> = ({ nameByID, result, saveScores }) => {
       )}
       <button
         type="button"
-        onClick={() => {
-          if (scores.every((score) => score !== null)) {
-            saveScores(scores);
-          }
-        }}
+        disabled={!(result.scores?.every((score) => score !== null))}
+        onClick={saveScores}
       >
         保存
       </button>

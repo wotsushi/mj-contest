@@ -30,9 +30,8 @@ export const useContest = (id: string) => {
     mutate(next);
     setContest(next);
   };
-  const saveScores = (round: number, table: number, scores: number[]) => {
-    updateContest(`results.${round}.${table}.scores`, scores);
-  };
+  const saveScores = (round: number, table: number) =>
+    updateContest("results", round, table, "scores");
   const saveContest = () => {
     putContest();
     window.alert("保存しました");

@@ -18,12 +18,10 @@ export const useDoc = <T>(id: string) => {
       }
     });
   }, [ref]);
-  const put = async () => {
-    await setDoc(ref, serialize(state));
-  };
-
-  const update = async (field: string, value: unknown) => {
-    updateDoc(ref, { [field]: serialize(value) });
+  const put = () => setDoc(ref, serialize(state));
+  const update = (...keys: (string | number)[]) => {
+    const field = keys.join(".");
+    updateDoc(ref, { [field]: serialize(get(state, keys)) });
   };
   return { state, setter, put, update };
 };
@@ -75,4 +73,6 @@ const serialize = (data: any): any => {
     Object.entries(data).map(([k, v]) => [k, serialize(v)]),
   );
 };
+
+const get = (data: any, keys: (string | number)[]): any => keys.length === 0 ? data : get(data[keys[0]], keys.slice(1))
 /* eslint-enable @typescript-eslint/no-explicit-any */

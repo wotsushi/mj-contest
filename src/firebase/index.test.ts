@@ -1,4 +1,10 @@
-import { doc, DocumentReference, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  doc,
+  DocumentReference,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { useDoc } from ".";
 import { act, renderHook } from "@testing-library/react";
 
@@ -12,11 +18,13 @@ const snapshot = (data: unknown) =>
       data: () => data,
     })) as typeof onSnapshot;
 const mockSetDoc = jest.mocked(setDoc);
+const mockUpdateDoc = jest.mocked(updateDoc);
 jest.mocked(doc).mockReturnValue({} as DocumentReference);
 
 beforeEach(() => {
   mockOnSnapshot.mockReset();
   mockSetDoc.mockReset();
+  mockUpdateDoc.mockReset();
 });
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -71,6 +79,30 @@ describe("useDoc", () => {
       act(() => result.current.setter(data));
       result.current.put();
       expect(mockSetDoc).toHaveBeenLastCalledWith(expect.anything(), expected);
+    });
+  });
+  describe("update", () => {
+    type TestCase = [
+      doc: any,
+      keys: (string | number)[],
+      expected: { [field: string]: any },
+    ];
+    it.each<TestCase>([
+      [[1000, 2000, 3900, 7700], [2], {2: 3900}],
+      [{ id: 42, score: 40000 }, ["score"], {score: 40000}],
+      [
+        { name: "a", scores: [10000, 20000, 30000, 40000] },
+        ["scores", 0],
+        {"scores.0": 10000},
+      ],
+    ])(`doc=%p keys=%p expected=%p`, (doc, keys, expected) => {
+      mockOnSnapshot.mockImplementation(snapshot(doc));
+      const result = renderHook(() => useDoc("")).result;
+      result.current.update(...keys);
+      expect(mockUpdateDoc).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expected
+      );
     });
   });
 });
