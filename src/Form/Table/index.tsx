@@ -23,7 +23,10 @@ const Table: React.FC<Props> = ({
   const updateScore = (i: number) => (score: number) => {
     const next = scores.map((s, j) => (j === i ? score : s));
     setDraftScores(next);
-    if (next.every((score) => score !== null) && next.every((score) => !isNaN(score))) {
+    if (
+      next.every((score) => score !== null) &&
+      next.every((score) => !isNaN(score))
+    ) {
       setScores(next);
     } else setScores(null);
   };
@@ -68,7 +71,7 @@ const Table: React.FC<Props> = ({
       )}
       <button
         type="button"
-        disabled={!(result.scores?.every((score) => score !== null))}
+        disabled={!result.scores?.every((score) => score !== null)}
         onClick={saveScores}
       >
         保存

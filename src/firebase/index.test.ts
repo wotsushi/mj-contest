@@ -88,12 +88,12 @@ describe("useDoc", () => {
       expected: { [field: string]: any },
     ];
     it.each<TestCase>([
-      [[1000, 2000, 3900, 7700], [2], {2: 3900}],
-      [{ id: 42, score: 40000 }, ["score"], {score: 40000}],
+      [[1000, 2000, 3900, 7700], [2], { 2: 3900 }],
+      [{ id: 42, score: 40000 }, ["score"], { score: 40000 }],
       [
         { name: "a", scores: [10000, 20000, 30000, 40000] },
         ["scores", 0],
-        {"scores.0": 10000},
+        { "scores.0": 10000 },
       ],
     ])(`doc=%p keys=%p expected=%p`, (doc, keys, expected) => {
       mockOnSnapshot.mockImplementation(snapshot(doc));
@@ -101,7 +101,7 @@ describe("useDoc", () => {
       result.current.update(...keys);
       expect(mockUpdateDoc).toHaveBeenLastCalledWith(
         expect.anything(),
-        expected
+        expected,
       );
     });
   });

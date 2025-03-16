@@ -74,5 +74,6 @@ const serialize = (data: any): any => {
   );
 };
 
-const get = (data: any, keys: (string | number)[]): any => keys.length === 0 ? data : get(data[keys[0]], keys.slice(1))
+const get = (data: any, keys: (string | number)[]): any =>
+  keys.length === 0 ? data : get(data[keys[0]], keys.slice(1));
 /* eslint-enable @typescript-eslint/no-explicit-any */
