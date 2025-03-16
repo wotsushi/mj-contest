@@ -25,13 +25,17 @@ export const useContest = (id: string) => {
     update: updateContest,
   } = useDoc<Contest>(id);
   const mutateContest = (mutate: (next: Contest) => void) => {
-    if (contest === null) return;
-    const next = structuredClone(contest);
-    mutate(next);
-    setContest(next);
+    setContest((prev) => {
+      if (prev === null) return null;
+      const next = structuredClone(prev);
+      mutate(next);
+      return next;
+    });
   };
-  const saveScores = (round: number, table: number) =>
+  const saveScores = (round: number, table: number) => {
     updateContest("results", round, table, "scores");
+    updateContest("results", round, table, "players");
+  };
   const saveContest = () => {
     putContest();
     window.alert("保存しました");

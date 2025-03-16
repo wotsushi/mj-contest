@@ -30,6 +30,11 @@ const Form: React.FC = () => {
       <Table
         key={`${round} ${table}`}
         result={result}
+        setPlayers={(players) =>
+          mutateContest((next) => {
+            next.results[round][table].players = players;
+          })
+        }
         setScores={(scores) =>
           mutateContest((next) => {
             next.results[round][table].scores = scores;

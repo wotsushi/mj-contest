@@ -1,31 +1,46 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { calcPoints, totalInitialScore } from "../../point";
 import ScoreInput from "./ScoreInput";
 import { Result } from "../../contest";
 import { useMaster } from "../../master";
+import WindSelect from "./WindSelect";
 
 type Props = {
   result: Result;
+  setPlayers: (players: number[]) => void;
   setScores: (scores: number[] | null) => void;
   saveScores: () => void;
 };
 
-const Table: React.FC<Props> = ({ result, setScores, saveScores }) => {
+const Table: React.FC<Props> = ({
+  result,
+  setPlayers,
+  setScores,
+  saveScores,
+}) => {
+  const [players, setDraftPlayers] = useState<number[]>(result.players);
   const [scores, setDraftScores] = useState<(number | null)[]>(
     result.scores ?? result.players.map(() => null),
   );
   const { nameByID } = useMaster();
-  if (nameByID === null) return null;
-  const updateScore = (i: number) => (score: number) => {
-    const next = scores.map((s, j) => (j === i ? score : s));
-    setDraftScores(next);
+  useEffect(() => {
+    if (isNotEqual(players, result.players)) setPlayers(players);
     if (
-      next.every((score) => score !== null) &&
-      next.every((score) => !isNaN(score))
+      scores.every((score) => score !== null) &&
+      scores.every((score) => !isNaN(score)) &&
+      (result.scores === null || isNotEqual(scores, result.scores))
     ) {
-      setScores(next);
-    } else setScores(null);
+      setScores(scores);
+    }
+  }, [players, scores, result.players, result.scores, setPlayers, setScores]);
+
+  if (nameByID === null) return null;
+  const updateScore = (i: number) => (score: number) =>
+    setDraftScores(scores.map((s, j) => (j === i ? score : s)));
+  const setWind = (i: number) => (w: number) => {
+    setDraftPlayers(swap(players, i, w));
+    setDraftScores(swap(scores, i, w));
   };
 
   const showPoints = scores.every((score) => score !== null && !isNaN(score));
@@ -39,15 +54,22 @@ const Table: React.FC<Props> = ({ result, setScores, saveScores }) => {
       <table>
         <thead>
           <tr>
-            {result.players.map((id) => (
+            {players.map((id) => (
               <Th key={id}>{nameByID.get(id) ?? ""}</Th>
             ))}
           </tr>
         </thead>
         <tbody>
           <Tr>
-            {scores.map((score, i) => (
+            {players.map((_, i) => (
               <Td key={i}>
+                <WindSelect wind={i} setWind={setWind(i)} />
+              </Td>
+            ))}
+          </Tr>
+          <Tr>
+            {scores.map((score, i) => (
+              <Td key={`${i} ${score}`}>
                 <ScoreInput score={score} commit={updateScore(i)} />
               </Td>
             ))}
@@ -103,4 +125,13 @@ const NumberLabel = styled.div<{ $negative?: boolean }>`
   color: ${({ $negative }) => ($negative ? "#ff0000" : undefined)};
 `;
 
+const isNotEqual = <T,>(draft: T[], data: T[]) =>
+  draft.length !== data.length || draft.some((v, i) => v !== data[i]);
+
+const swap = <T,>(a: T[], i: number, j: number) =>
+  a.map((_, k) =>
+    k === i ? a[j]
+    : k === j ? a[i]
+    : a[k],
+  );
 export default Table;
