@@ -1,13 +1,17 @@
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { players, useContest } from "../contest";
 import Table from "./Table";
 
 const Form: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [params] = useSearchParams();
+  const round = parseInt(params.get("round") ?? "");
+  const table = parseInt(params.get("table") ?? "");
   const { contest, mutateContest, saveScores } = useContest(id ?? "");
-  if (id === undefined || contest === null) return null;
+  if (contest === null || isNaN(round) || isNaN(table)) return null;
   const nameByID = new Map(players.map(({ id, name }) => [id, name]));
-  const result = contest.results[0][0];
+  const result = contest.results.at(round)?.at(table);
+  if (result === undefined) return null;
   return (
     <div>
       <Table
@@ -15,10 +19,10 @@ const Form: React.FC = () => {
         result={result}
         setScores={(scores) =>
           mutateContest((next) => {
-            next.results[0][0].scores = scores;
+            next.results[round][table].scores = scores;
           })
         }
-        saveScores={() => saveScores(0, 0)}
+        saveScores={() => saveScores(round, table)}
       />
     </div>
   );
