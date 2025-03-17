@@ -48,9 +48,9 @@ const Cell = styled.td`
   color: #434343;
 `;
 
-const Rank = styled(Cell)<{ $rank: number}>`
+const Rank = styled(Cell)<{ $rank: number }>`
   font-weight: bold;
-  color: ${({ $rank }) => (["#d4af37", "#a9a9a9", "#8b5a2b"].at($rank - 1))};
+  color: ${({ $rank }) => ["#d4af37", "#a9a9a9", "#8b5a2b"].at($rank - 1)};
 `;
 
 const Name = styled(Cell)`
