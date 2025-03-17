@@ -66,7 +66,7 @@ const EditContest: React.FC = () => {
       >
         追加
       </button>
-      <button type="button" onClick={() => saveContest(contest)}>
+      <button type="button" onClick={() => saveContest()}>
         保存
       </button>
     </div>
