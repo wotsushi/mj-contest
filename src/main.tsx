@@ -10,7 +10,7 @@ import EditContest from "./EditContest/index.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/mj-contest">
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/result/:id" element={<Result />} />
