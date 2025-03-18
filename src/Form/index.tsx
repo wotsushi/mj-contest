@@ -7,8 +7,8 @@ import Selector from "./Selector";
 const Form: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [params, setParams] = useSearchParams();
-  const round = parseInt(params.get("round") ?? "");
-  const table = parseInt(params.get("table") ?? "");
+  const round = parseInt(params.get("round") ?? "0");
+  const table = parseInt(params.get("table") ?? "0");
   const { contest, mutateContest, saveScores } = useContest(id ?? "");
   if (contest === null || isNaN(round) || isNaN(table)) return null;
   const result = contest.results.at(round)?.at(table);
