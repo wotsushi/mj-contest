@@ -12,11 +12,6 @@ export type Result = {
   scores: number[] | null;
 };
 
-export type Player = {
-  id: number;
-  name: string;
-};
-
 export const useContest = (id: string) => {
   const {
     state: contest,
