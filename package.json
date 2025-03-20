@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "stylelint": "stylelint .",
     "prettier": "prettier --write \"**/*.{js,ts,tsx,json}\"",
+    "prettier-check": "prettier --check \"**/*.{js,ts,tsx,json}\"",
     "test": "jest",
     "preview": "vite preview",
     "postbuild": "cp dist/index.html dist/404.html",
