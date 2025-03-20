@@ -88,11 +88,7 @@ const Table: React.FC<Props> = ({
       {showPoints && total !== totalInitialScore(scores.length) && (
         <div>⚠️ 持ち点の合計が {total.toLocaleString()} です</div>
       )}
-      <button
-        type="button"
-        disabled={!showPoints}
-        onClick={saveScores}
-      >
+      <button type="button" disabled={!showPoints} onClick={saveScores}>
         保存
       </button>
     </Root>
