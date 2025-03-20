@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 type Props = {
   score: number | null;
@@ -7,14 +6,12 @@ type Props = {
 };
 
 const ScoreInput: React.FC<Props> = ({ score, commit }) => {
-  const [draft, setDraft] = useState<number | null>(score);
   return (
     <Input
       type="number"
       placeholder="持ち点"
-      value={draft ?? ""}
-      onChange={(e) => setDraft(parseInt(e.target.value))}
-      onBlur={() => commit(draft ?? Number.NaN)}
+      defaultValue={score ?? ""}
+      onBlur={(e) => commit(parseInt(e.target.value))}
     />
   );
 };

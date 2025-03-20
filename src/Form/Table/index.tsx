@@ -69,7 +69,7 @@ const Table: React.FC<Props> = ({
           </Tr>
           <Tr>
             {scores.map((score, i) => (
-              <Td key={`${i} ${score}`}>
+              <Td key={`${i} ${players[i]}`}>
                 <ScoreInput score={score} commit={updateScore(i)} />
               </Td>
             ))}
