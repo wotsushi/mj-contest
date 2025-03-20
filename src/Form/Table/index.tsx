@@ -90,7 +90,7 @@ const Table: React.FC<Props> = ({
       )}
       <button
         type="button"
-        disabled={!result.scores?.every((score) => score !== null)}
+        disabled={!showPoints}
         onClick={saveScores}
       >
         保存
