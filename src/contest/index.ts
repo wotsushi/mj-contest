@@ -1,4 +1,4 @@
-import { useDoc } from "./firebase";
+import { useDoc } from "../firebase";
 
 export type Contest = {
   date: string;

@@ -17,16 +17,17 @@ export const mockOnSnapshot = () => {
   return sendSnapshot;
 };
 
-export const expectSetDoc = (expected: unknown) => {
-  expect(jest.mocked(setDoc)).toHaveBeenLastCalledWith(
-    expect.anything(),
-    expected,
-  );
+export const expectSetDoc = (...expected: unknown[]) => {
+  expected.forEach((data) => {
+    expect(jest.mocked(setDoc)).toHaveBeenCalledWith(expect.anything(), data);
+  });
 };
 
-export const expectUpdateDoc = (expected: unknown) => {
-  expect(jest.mocked(updateDoc)).toHaveBeenLastCalledWith(
-    expect.anything(),
-    expected,
-  );
+export const expectUpdateDoc = (...expected: unknown[]) => {
+  expected.forEach((data) => {
+    expect(jest.mocked(updateDoc)).toHaveBeenCalledWith(
+      expect.anything(),
+      data,
+    );
+  });
 };

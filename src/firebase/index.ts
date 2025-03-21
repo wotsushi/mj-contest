@@ -8,6 +8,14 @@ import {
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 
+export type Doc<T> =
+  T extends (infer S)[] ? Record<number, Doc<S>>
+  : T extends object ?
+    {
+      [K in keyof T]: Doc<T[K]>;
+    }
+  : T;
+
 export const useDoc = <T>(id: string) => {
   const [state, setter] = useState<T | null>(null);
   const ref = React.useMemo(() => doc(db, collection, id), [id]);
