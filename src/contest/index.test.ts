@@ -112,9 +112,9 @@ describe("useContest", () => {
       ],
     ])("%s", (_, doc, mutate, expectedDoc, expectedSetDoc) => {
       const sendSnapshot = mockOnSnapshot();
-      const { result } = renderHook(() => useContest(""));
+      const { result } = renderHook(() => useContest("contest"));
       act(() => {
-        sendSnapshot.call(doc);
+        sendSnapshot["contest"](doc);
       });
       act(() => {
         result.current.mutateContest(mutate);
@@ -237,9 +237,9 @@ describe("useContest", () => {
         expectedUpdatePlayers,
       ) => {
         const sendSnapshot = mockOnSnapshot();
-        const { result } = renderHook(() => useContest(""));
+        const { result } = renderHook(() => useContest("contest"));
         act(() => {
-          sendSnapshot.call(doc);
+          sendSnapshot["contest"](doc);
         });
         act(() => {
           result.current.mutateContest(mutate);

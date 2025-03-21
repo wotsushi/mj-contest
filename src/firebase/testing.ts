@@ -1,14 +1,18 @@
-import { onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import {
+  DocumentData,
+  DocumentReference,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 export const mockOnSnapshot = () => {
-  const sendSnapshot = {
-    call: (_: unknown) => {},
-  };
+  const sendSnapshot: Record<string, (data: unknown) => void> = {};
   jest.mocked(onSnapshot).mockImplementation(((
-    _: unknown,
+    ref: DocumentReference<DocumentData, DocumentData>,
     onNext: (_: unknown) => void,
   ) => {
-    sendSnapshot.call = (data: unknown) =>
+    sendSnapshot[ref.id] = (data: unknown) =>
       onNext({
         exists: () => true,
         data: () => data,

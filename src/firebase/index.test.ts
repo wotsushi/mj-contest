@@ -24,8 +24,8 @@ describe("useDoc", () => {
       ],
     ])(`doc=%p expected=%p`, (doc, expected) => {
       const sendSnapshot = mockOnSnapshot();
-      const { result } = renderHook(() => useDoc(""));
-      act(() => sendSnapshot.call(doc));
+      const { result } = renderHook(() => useDoc("hoge"));
+      act(() => sendSnapshot["hoge"](doc));
       expect(result.current.state).toEqual(expected);
     });
   });
@@ -47,7 +47,7 @@ describe("useDoc", () => {
         { name: "a", scores: { 0: 10000, 1: 20000, 2: 30000, 3: 40000 } },
       ],
     ])(`data=%p expected=%p`, (data, expected) => {
-      const { result } = renderHook(() => useDoc(""));
+      const { result } = renderHook(() => useDoc("hoge"));
       act(() => result.current.setter(data));
       result.current.put();
       expectSetDoc(expected);
@@ -69,8 +69,8 @@ describe("useDoc", () => {
       ],
     ])(`doc=%p keys=%p expected=%p`, (doc, keys, expected) => {
       const sendSnapshot = mockOnSnapshot();
-      const { result } = renderHook(() => useDoc(""));
-      act(() => sendSnapshot.call(doc));
+      const { result } = renderHook(() => useDoc("hoge"));
+      act(() => sendSnapshot["hoge"](doc));
       result.current.update(...keys);
       expectUpdateDoc(expected);
     });

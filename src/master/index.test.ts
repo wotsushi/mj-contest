@@ -19,7 +19,7 @@ describe("useMaster", () => {
       const sendSnapshot = mockOnSnapshot();
       const { result } = renderHook(() => useMaster());
       act(() =>
-        sendSnapshot.call({
+        sendSnapshot["master"]({
           players: Object.fromEntries(
             players.map(([id, name], i) => [
               i,
