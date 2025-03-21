@@ -1,31 +1,6 @@
-import {
-  doc,
-  DocumentReference,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
 import { useDoc } from ".";
 import { act, renderHook } from "@testing-library/react";
-
-jest.mock("firebase/app");
-jest.mock("firebase/firestore");
-const mockOnSnapshot = jest.mocked(onSnapshot);
-const snapshot = (data: unknown) =>
-  ((_: unknown, onNext: (_d: unknown) => void) =>
-    onNext({
-      exists: () => true,
-      data: () => data,
-    })) as typeof onSnapshot;
-const mockSetDoc = jest.mocked(setDoc);
-const mockUpdateDoc = jest.mocked(updateDoc);
-jest.mocked(doc).mockReturnValue({} as DocumentReference);
-
-beforeEach(() => {
-  mockOnSnapshot.mockReset();
-  mockSetDoc.mockReset();
-  mockUpdateDoc.mockReset();
-});
+import { expectSetDoc, expectUpdateDoc, mockOnSnapshot } from "./testing";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 describe("useDoc", () => {
@@ -48,13 +23,10 @@ describe("useDoc", () => {
         { name: "a", scores: [10000, 20000, 30000, 40000] },
       ],
     ])(`doc=%p expected=%p`, (doc, expected) => {
-      mockOnSnapshot.mockImplementation(snapshot(doc));
-      const {
-        result: {
-          current: { state: actual },
-        },
-      } = renderHook(() => useDoc(""));
-      expect(actual).toEqual(expected);
+      const sendSnapshot = mockOnSnapshot();
+      const { result } = renderHook(() => useDoc(""));
+      act(() => sendSnapshot.call(doc));
+      expect(result.current.state).toEqual(expected);
     });
   });
   describe("put", () => {
@@ -75,10 +47,10 @@ describe("useDoc", () => {
         { name: "a", scores: { 0: 10000, 1: 20000, 2: 30000, 3: 40000 } },
       ],
     ])(`data=%p expected=%p`, (data, expected) => {
-      const result = renderHook(() => useDoc("")).result;
+      const { result } = renderHook(() => useDoc(""));
       act(() => result.current.setter(data));
       result.current.put();
-      expect(mockSetDoc).toHaveBeenLastCalledWith(expect.anything(), expected);
+      expectSetDoc(expected);
     });
   });
   describe("update", () => {
@@ -96,13 +68,11 @@ describe("useDoc", () => {
         { "scores.0": 10000 },
       ],
     ])(`doc=%p keys=%p expected=%p`, (doc, keys, expected) => {
-      mockOnSnapshot.mockImplementation(snapshot(doc));
-      const result = renderHook(() => useDoc("")).result;
+      const sendSnapshot = mockOnSnapshot();
+      const { result } = renderHook(() => useDoc(""));
+      act(() => sendSnapshot.call(doc));
       result.current.update(...keys);
-      expect(mockUpdateDoc).toHaveBeenLastCalledWith(
-        expect.anything(),
-        expected,
-      );
+      expectUpdateDoc(expected);
     });
   });
 });
