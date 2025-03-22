@@ -1,3 +1,4 @@
+import "@testing-library/jest-dom";
 import "core-js/actual/structured-clone";
 import { TextEncoder } from "util";
 import { onSnapshot, setDoc, updateDoc } from "firebase/firestore";

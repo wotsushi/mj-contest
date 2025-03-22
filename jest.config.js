@@ -10,5 +10,5 @@ export default {
       },
     ],
   },
-  setupFilesAfterEnv: ["./setupTests.ts"],
+  setupFilesAfterEnv: ["./src/setupTests.ts"],
 };
