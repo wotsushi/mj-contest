@@ -63,6 +63,7 @@ const Result: React.FC = () => {
       <tbody>
         {rows.map((row) => (
           <Row
+            key={row.id}
             id={row.id}
             rank={row.rank}
             name={row.name}
