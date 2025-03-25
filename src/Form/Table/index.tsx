@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { calcPoints, totalInitialScore } from "../../point";
 import ScoreInput from "./ScoreInput";
 import { Result } from "../../contest";
-import { useMaster } from "../../master";
 import WindSelect from "./WindSelect";
 
 type Props = {
+  nameByID: Map<number, string>;
   result: Result;
   setPlayers: (players: number[]) => void;
   setScores: (scores: number[] | null) => void;
@@ -14,6 +14,7 @@ type Props = {
 };
 
 const Table: React.FC<Props> = ({
+  nameByID,
   result,
   setPlayers,
   setScores,
@@ -23,7 +24,6 @@ const Table: React.FC<Props> = ({
   const [scores, setDraftScores] = useState<(number | null)[]>(
     result.scores ?? result.players.map(() => null),
   );
-  const { nameByID } = useMaster();
   useEffect(() => {
     if (isNotEqual(players, result.players)) setPlayers(players);
     if (
@@ -35,7 +35,6 @@ const Table: React.FC<Props> = ({
     }
   }, [players, scores, result.players, result.scores, setPlayers, setScores]);
 
-  if (nameByID === null) return null;
   const updateScore = (i: number) => (score: number) =>
     setDraftScores(scores.map((s, j) => (j === i ? score : s)));
   const setWind = (i: number) => (w: number) => {
