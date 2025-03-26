@@ -22,6 +22,7 @@ const Selector: React.FC<Props> = ({
   return (
     <Root>
       <Selectbox
+        name="round"
         options={contest.results.map((_, i) => `第${i + 1}回戦`)}
         current={round}
         set={(i: number) => {
@@ -30,6 +31,7 @@ const Selector: React.FC<Props> = ({
         }}
       />
       <Selectbox
+        name="table"
         options={contest.results[round].map((t) => t.table)}
         current={table}
         set={setTable}

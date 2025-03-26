@@ -1,14 +1,19 @@
 import styled from "styled-components";
 
 type Props = {
+  name: string;
   options: string[];
   current: number;
   set: (i: number) => void;
 };
 
-const Selectbox: React.FC<Props> = ({ options, current, set }) => (
+const Selectbox: React.FC<Props> = ({ name, options, current, set }) => (
   <div>
-    <Select value={current} onChange={(e) => set(parseInt(e.target.value))}>
+    <Select
+      value={current}
+      onChange={(e) => set(parseInt(e.target.value))}
+      aria-label={name}
+    >
       {options.map((option, i) => (
         <option key={i} value={i}>
           {option}

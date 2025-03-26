@@ -7,7 +7,11 @@ type Props = {
 
 const WindSelect: React.FC<Props> = ({ wind, setWind }) => (
   <div>
-    <Select value={wind} onChange={(e) => setWind(parseInt(e.target.value))}>
+    <Select
+      value={wind}
+      onChange={(e) => setWind(parseInt(e.target.value))}
+      aria-label="wind"
+    >
       {Winds.map((w, i) => (
         <option key={i} value={i}>
           {w}
