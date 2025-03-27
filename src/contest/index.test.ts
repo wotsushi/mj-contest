@@ -13,7 +13,7 @@ describe("useContest", () => {
   describe("saveContest", () => {
     type TestCase = [
       name: string,
-      doc: Contest,
+      doc: Doc<Contest>,
       mutate: (next: Contest) => void,
       expectedDoc: Contest,
       expectedSetDoc: Doc<Contest>,

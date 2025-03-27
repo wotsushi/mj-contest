@@ -49,12 +49,7 @@ describe("<Form />", () => {
   });
   it("東1局の自風変更", async () => {
     renderForm((contest) => {
-      contest.results[0][0].scores = {
-        0: 40000,
-        1: 30000,
-        2: 20000,
-        3: 10000,
-      };
+      contest.results[0][0].scores = [40000, 30000, 20000, 10000];
     });
     const windSelectors = screen.getAllByRole("combobox", { name: "wind" });
     expect(
@@ -96,12 +91,7 @@ describe("<Form />", () => {
   });
   it("持ち点変更", async () => {
     renderForm((contest) => {
-      contest.results[1][1].scores = {
-        0: 40000,
-        1: 30000,
-        2: 20000,
-        3: 10000,
-      };
+      contest.results[1][1].scores = [40000, 30000, 20000, 10000];
     });
     await userEvent.selectOptions(
       screen.getByRole("combobox", { name: "round" }),
@@ -136,12 +126,7 @@ describe("<Form />", () => {
     const [contest, sendSnapshot] = renderForm();
     await typeScores([40000, 30000, 20000, 10000]);
     const updatedContest = structuredClone(contest);
-    updatedContest.results[0][1].scores = {
-      0: 35000,
-      1: 30000,
-      2: 20000,
-      3: 15000,
-    };
+    updatedContest.results[0][1].scores = [35000, 30000, 20000, 15000];
     act(() => sendSnapshot["hoge"](updatedContest));
     expect(getScores()).toEqual(["40000", "30000", "20000", "10000"]);
     await userEvent.click(screen.getByRole("button", { name: "保存" }));
@@ -197,44 +182,44 @@ const getPoints = () =>
     .getAllByRole("cell")
     .map(({ textContent }) => textContent);
 
-const players = {
-  0: { id: 1, name: "player 1" },
-  1: { id: 2, name: "player 2" },
-  2: { id: 3, name: "player 3" },
-  3: { id: 4, name: "player 4" },
-  4: { id: 5, name: "player 5" },
-  5: { id: 6, name: "player 6" },
-  6: { id: 7, name: "player 7" },
-  7: { id: 8, name: "player 8" },
-};
+const players = [
+  { id: 1, name: "player 1" },
+  { id: 2, name: "player 2" },
+  { id: 3, name: "player 3" },
+  { id: 4, name: "player 4" },
+  { id: 5, name: "player 5" },
+  { id: 6, name: "player 6" },
+  { id: 7, name: "player 7" },
+  { id: 8, name: "player 8" },
+];
 
-const contest: Doc<Contest> = {
+const contest: Contest = {
   date: "2025-03-21",
-  players: { 0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8 },
-  results: {
-    0: {
-      0: {
+  players: [1, 2, 3, 4, 5, 6, 7, 8],
+  results: [
+    [
+      {
         table: "A",
-        players: { 0: 1, 1: 2, 2: 3, 3: 4 },
+        players: [1, 2, 3, 4],
         scores: null,
       },
-      1: {
+      {
         table: "B",
-        players: { 0: 5, 1: 6, 2: 7, 3: 8 },
+        players: [5, 6, 7, 8],
         scores: null,
       },
-    },
-    1: {
-      0: {
+    ],
+    [
+      {
         table: "A",
-        players: { 0: 1, 1: 2, 2: 5, 3: 6 },
+        players: [1, 2, 5, 6],
         scores: null,
       },
-      1: {
+      {
         table: "B",
-        players: { 0: 3, 1: 4, 2: 7, 3: 8 },
+        players: [3, 4, 7, 8],
         scores: null,
       },
-    },
-  },
+    ],
+  ],
 };

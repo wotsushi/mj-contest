@@ -4,7 +4,6 @@ import Result from ".";
 import { act } from "react";
 import { MemoryRouter, Route, Routes } from "react-router";
 import { Contest } from "../contest";
-import { Doc } from "../firebase";
 
 describe("<Result />", () => {
   type Scores = Tuple<number, 4> | null;
@@ -212,46 +211,46 @@ describe("<Result />", () => {
   });
 });
 
-const players = {
-  0: { id: 1, name: "player 1" },
-  1: { id: 2, name: "player 2" },
-  2: { id: 3, name: "player 3" },
-  3: { id: 4, name: "player 4" },
-  4: { id: 5, name: "player 5" },
-  5: { id: 6, name: "player 6" },
-  6: { id: 7, name: "player 7" },
-  7: { id: 8, name: "player 8" },
-};
+const players = [
+  { id: 1, name: "player 1" },
+  { id: 2, name: "player 2" },
+  { id: 3, name: "player 3" },
+  { id: 4, name: "player 4" },
+  { id: 5, name: "player 5" },
+  { id: 6, name: "player 6" },
+  { id: 7, name: "player 7" },
+  { id: 8, name: "player 8" },
+];
 
-const contest: Doc<Contest> = {
+const contest: Contest = {
   date: "2025-03-21",
-  players: { 0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8 },
-  results: {
-    0: {
-      0: {
+  players: [1, 2, 3, 4, 5, 6, 7, 8],
+  results: [
+    [
+      {
         table: "A",
-        players: { 0: 1, 1: 2, 2: 3, 3: 4 },
+        players: [1, 2, 3, 4],
         scores: null,
       },
-      1: {
+      {
         table: "B",
-        players: { 0: 5, 1: 6, 2: 7, 3: 8 },
+        players: [5, 6, 7, 8],
         scores: null,
       },
-    },
-    1: {
-      0: {
+    ],
+    [
+      {
         table: "A",
-        players: { 0: 1, 1: 2, 2: 5, 3: 6 },
+        players: [1, 2, 5, 6],
         scores: null,
       },
-      1: {
+      {
         table: "B",
-        players: { 0: 3, 1: 4, 2: 7, 3: 8 },
+        players: [3, 4, 7, 8],
         scores: null,
       },
-    },
-  },
+    ],
+  ],
 };
 
 type Tuple<T, N extends number, R extends T[] = []> =

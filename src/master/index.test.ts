@@ -20,15 +20,10 @@ describe("useMaster", () => {
       const { result } = renderHook(() => useMaster());
       act(() =>
         sendSnapshot["master"]({
-          players: Object.fromEntries(
-            players.map(([id, name], i) => [
-              i,
-              {
-                id,
-                name,
-              },
-            ]),
-          ),
+          players: players.map(([id, name]) => ({
+            id,
+            name,
+          })),
           rules: [],
         }),
       );

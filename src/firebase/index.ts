@@ -64,7 +64,7 @@ const deserialize = (doc: any): unknown => {
   return Object.fromEntries(keys.map((key) => [key, deserialize(doc[key])]));
 };
 
-const serialize = (data: any): any => {
+export const serialize = (data: any): any => {
   if (
     data === null ||
     data === undefined ||

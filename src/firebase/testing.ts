@@ -5,6 +5,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { serialize } from ".";
 
 export const mockOnSnapshot = () => {
   const sendSnapshot: Record<string, (data: unknown) => void> = {};
@@ -15,7 +16,7 @@ export const mockOnSnapshot = () => {
     sendSnapshot[ref.id] = (data: unknown) =>
       onNext({
         exists: () => true,
-        data: () => data,
+        data: () => serialize(data),
       });
   }) as typeof onSnapshot);
   return sendSnapshot;
