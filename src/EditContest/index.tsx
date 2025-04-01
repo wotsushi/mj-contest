@@ -1,12 +1,24 @@
 import { useParams } from "react-router";
 import { useContest } from "../contest";
+import EditPlayers from "./EditPlayers";
+import { useMaster } from "../master";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { contest, mutateContest: mutate, saveContest } = useContest(id ?? "");
-  if (id === undefined || contest === null) return null;
+  const { nameByID } = useMaster();
+  if (id === undefined || contest === null || nameByID === null) return null;
   return (
     <div>
+      <EditPlayers
+        nameByID={nameByID}
+        players={contest.players}
+        setPlayers={(players) =>
+          mutate((next) => {
+            next.players = players;
+          })
+        }
+      />
       {contest.results.map((results, i) => (
         <div key={i}>
           <div>{i + 1}回戦</div>
