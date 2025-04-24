@@ -3,6 +3,7 @@ import { useContest } from "../contest";
 import EditPlayers from "./EditPlayers";
 import { useMaster } from "../master";
 import { generateTable } from "./table";
+import EditTable from "./EditTable";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,38 +25,16 @@ const EditContest: React.FC = () => {
         <div key={i}>
           <div>{i + 1}回戦</div>
           {results.map((result, j) => (
-            <div key={j}>
-              <div>
-                <input
-                  type="text"
-                  value={result.table}
-                  size={10}
-                  onChange={(e) =>
-                    mutate((next) => {
-                      next.results[i][j].table = e.target.value;
-                    })
-                  }
-                />
-              </div>
-              <div>
-                {result.players.map((player, k) => (
-                  <input
-                    key={k}
-                    min={0}
-                    max={100}
-                    type="number"
-                    value={player}
-                    onChange={(e) =>
-                      mutate((next) => {
-                        next.results[i][j].players[k] = parseInt(
-                          e.target.value,
-                        );
-                      })
-                    }
-                  />
-                ))}
-              </div>
-            </div>
+            <EditTable
+              key={j}
+              nameByID={nameByID}
+              result={result}
+              setResult={(contest) => {
+                mutate((next) => {
+                  next.results[i][j] = contest;
+                });
+              }}
+            />
           ))}
           <button
             type="button"

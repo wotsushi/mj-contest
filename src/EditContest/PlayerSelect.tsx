@@ -6,7 +6,7 @@ type Props = {
   set: (i: number) => void;
 };
 
-const Selectbox: React.FC<Props> = ({ nameByID, current, set }) => (
+const PlayerSelect: React.FC<Props> = ({ nameByID, current, set }) => (
   <div>
     <Select value={current} onChange={(e) => set(parseInt(e.target.value))}>
       {Array.from(nameByID.entries()).map(([id, name]) => (
@@ -23,4 +23,4 @@ const Select = styled.select`
   font-size: 24px;
 `;
 
-export default Selectbox;
+export default PlayerSelect;

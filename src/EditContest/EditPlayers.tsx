@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import Selectbox from "./Selectbox";
+import PlayerSelect from "./PlayerSelect";
 
 type Props = {
   nameByID: Map<number, string>;
@@ -14,7 +14,7 @@ const EditPlayers: React.FC<Props> = ({ nameByID, players, setPlayers }) => {
   return (
     <Root>
       {effectivePlayers.map((player, i) => (
-        <Selectbox
+        <PlayerSelect
           key={i}
           nameByID={nameByID}
           current={player}
