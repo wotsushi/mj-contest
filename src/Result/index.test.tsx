@@ -9,205 +9,349 @@ describe("<Result />", () => {
   type Scores = Tuple<number, 4> | null;
   type Tables = Tuple<Scores, 2>;
   type Results = Tuple<Tables, 2>;
-  type Table = Tuple<
-    [rank: string, name: string, total: string, round1: string, round2: string],
-    8
-  >;
   type SavedScore = [round: 0 | 1, table: 0 | 1, scores: Tuple<number, 4>];
-  type TestCase = [
-    name: string,
-    scores: Results,
-    expectedBefore: Table,
-    ...(
-      | [savedScore: null, expectedAfter: null]
-      | [savedScore: SavedScore, expectedAfter: Table]
-    ),
-  ];
-  it.each<TestCase>([
-    [
-      "開始",
+
+  describe("normal", () => {
+    type Table = Tuple<
       [
-        [null, null],
-        [null, null],
+        rank: string,
+        name: string,
+        total: string,
+        round1: string,
+        round2: string,
       ],
+      8
+    >;
+    type TestCase = [
+      name: string,
+      scores: Results,
+      expectedBefore: Table,
+      ...(
+        | [savedScore: null, expectedAfter: null]
+        | [savedScore: SavedScore, expectedAfter: Table]
+      ),
+    ];
+    it.each<TestCase>([
       [
-        ["1", "player 1", "0.0", "A", "A"],
-        ["1", "player 2", "0.0", "A", "A"],
-        ["1", "player 3", "0.0", "A", "B"],
-        ["1", "player 4", "0.0", "A", "B"],
-        ["1", "player 5", "0.0", "B", "A"],
-        ["1", "player 6", "0.0", "B", "A"],
-        ["1", "player 7", "0.0", "B", "B"],
-        ["1", "player 8", "0.0", "B", "B"],
-      ],
-      null,
-      null,
-    ],
-    [
-      "途中",
-      [
+        "開始",
         [
-          [40000, 30000, 20000, 10000],
-          [40000, 30000, 20100, 9900],
-        ],
-        [[40000, 30000, 20000, 10000], null],
-      ],
-      [
-        ["1", "player 1", "80.0", "40.0", "40.0"],
-        ["2", "player 5", "25.0", "40.0", "-15.0"],
-        ["3", "player 2", "10.0", "5.0", "5.0"],
-        ["4", "player 7", "-14.9", "-14.9", "B"],
-        ["5", "player 3", "-15.0", "-15.0", "B"],
-        ["6", "player 6", "-25.0", "5.0", "-30.0"],
-        ["7", "player 4", "-30.0", "-30.0", "B"],
-        ["8", "player 8", "-30.1", "-30.1", "B"],
-      ],
-      null,
-      null,
-    ],
-    [
-      "終了",
-      [
-        [
-          [40000, 30000, 20000, 10000],
-          [40000, 30000, 20000, 10000],
+          [null, null],
+          [null, null],
         ],
         [
-          [40000, 30000, 21000, 9000],
-          [40000, 30000, 20000, 10000],
+          ["1", "player 1", "0.0", "A", "A"],
+          ["1", "player 2", "0.0", "A", "A"],
+          ["1", "player 3", "0.0", "A", "B"],
+          ["1", "player 4", "0.0", "A", "B"],
+          ["1", "player 5", "0.0", "B", "A"],
+          ["1", "player 6", "0.0", "B", "A"],
+          ["1", "player 7", "0.0", "B", "B"],
+          ["1", "player 8", "0.0", "B", "B"],
         ],
+        null,
+        null,
       ],
       [
-        ["1", "player 1", "80.0", "40.0", "40.0"],
-        ["2", "player 5", "26.0", "40.0", "-14.0"],
-        ["3", "player 3", "25.0", "-15.0", "40.0"],
-        ["4", "player 2", "10.0", "5.0", "5.0"],
-        ["5", "player 4", "-25.0", "-30.0", "5.0"],
-        ["6", "player 6", "-26.0", "5.0", "-31.0"],
-        ["7", "player 7", "-30.0", "-15.0", "-15.0"],
-        ["8", "player 8", "-60.0", "-30.0", "-30.0"],
-      ],
-      null,
-      null,
-    ],
-    [
-      "同率",
-      [
+        "途中",
         [
-          [40000, 30000, 20000, 10000],
-          [40000, 30000, 20000, 10000],
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20100, 9900],
+          ],
+          [[40000, 30000, 20000, 10000], null],
         ],
         [
-          [40000, 30000, 20000, 10000],
-          [40000, 30000, 20000, 10000],
+          ["1", "player 1", "80.0", "40.0", "40.0"],
+          ["2", "player 5", "25.0", "40.0", "-15.0"],
+          ["3", "player 2", "10.0", "5.0", "5.0"],
+          ["4", "player 7", "-14.9", "-14.9", "B"],
+          ["5", "player 3", "-15.0", "-15.0", "B"],
+          ["6", "player 6", "-25.0", "5.0", "-30.0"],
+          ["7", "player 4", "-30.0", "-30.0", "B"],
+          ["8", "player 8", "-30.1", "-30.1", "B"],
+        ],
+        null,
+        null,
+      ],
+      [
+        "終了",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+          [
+            [40000, 30000, 21000, 9000],
+            [40000, 30000, 20000, 10000],
+          ],
+        ],
+        [
+          ["1", "player 1", "80.0", "40.0", "40.0"],
+          ["2", "player 5", "26.0", "40.0", "-14.0"],
+          ["3", "player 3", "25.0", "-15.0", "40.0"],
+          ["4", "player 2", "10.0", "5.0", "5.0"],
+          ["5", "player 4", "-25.0", "-30.0", "5.0"],
+          ["6", "player 6", "-26.0", "5.0", "-31.0"],
+          ["7", "player 7", "-30.0", "-15.0", "-15.0"],
+          ["8", "player 8", "-60.0", "-30.0", "-30.0"],
+        ],
+        null,
+        null,
+      ],
+      [
+        "同率",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+        ],
+        [
+          ["1", "player 1", "80.0", "40.0", "40.0"],
+          ["2", "player 3", "25.0", "-15.0", "40.0"],
+          ["2", "player 5", "25.0", "40.0", "-15.0"],
+          ["4", "player 2", "10.0", "5.0", "5.0"],
+          ["5", "player 4", "-25.0", "-30.0", "5.0"],
+          ["5", "player 6", "-25.0", "5.0", "-30.0"],
+          ["7", "player 7", "-30.0", "-15.0", "-15.0"],
+          ["8", "player 8", "-60.0", "-30.0", "-30.0"],
+        ],
+        null,
+        null,
+      ],
+      [
+        "入力",
+        [
+          [null, null],
+          [null, null],
+        ],
+        [
+          ["1", "player 1", "0.0", "A", "A"],
+          ["1", "player 2", "0.0", "A", "A"],
+          ["1", "player 3", "0.0", "A", "B"],
+          ["1", "player 4", "0.0", "A", "B"],
+          ["1", "player 5", "0.0", "B", "A"],
+          ["1", "player 6", "0.0", "B", "A"],
+          ["1", "player 7", "0.0", "B", "B"],
+          ["1", "player 8", "0.0", "B", "B"],
+        ],
+        [0, 0, [40000, 30000, 20000, 10000]],
+        [
+          ["1", "player 1", "40.0", "40.0", "A"],
+          ["2", "player 2", "5.0", "5.0", "A"],
+          ["3", "player 5", "0.0", "B", "A"],
+          ["3", "player 6", "0.0", "B", "A"],
+          ["3", "player 7", "0.0", "B", "B"],
+          ["3", "player 8", "0.0", "B", "B"],
+          ["7", "player 3", "-15.0", "-15.0", "B"],
+          ["8", "player 4", "-30.0", "-30.0", "B"],
         ],
       ],
       [
-        ["1", "player 1", "80.0", "40.0", "40.0"],
-        ["2", "player 3", "25.0", "-15.0", "40.0"],
-        ["2", "player 5", "25.0", "40.0", "-15.0"],
-        ["4", "player 2", "10.0", "5.0", "5.0"],
-        ["5", "player 4", "-25.0", "-30.0", "5.0"],
-        ["5", "player 6", "-25.0", "5.0", "-30.0"],
-        ["7", "player 7", "-30.0", "-15.0", "-15.0"],
-        ["8", "player 8", "-60.0", "-30.0", "-30.0"],
+        "更新",
+        [
+          [[40000, 30000, 20000, 10000], null],
+          [null, null],
+        ],
+        [
+          ["1", "player 1", "40.0", "40.0", "A"],
+          ["2", "player 2", "5.0", "5.0", "A"],
+          ["3", "player 5", "0.0", "B", "A"],
+          ["3", "player 6", "0.0", "B", "A"],
+          ["3", "player 7", "0.0", "B", "B"],
+          ["3", "player 8", "0.0", "B", "B"],
+          ["7", "player 3", "-15.0", "-15.0", "B"],
+          ["8", "player 4", "-30.0", "-30.0", "B"],
+        ],
+        [0, 0, [45000, 25000, 20000, 10000]],
+        [
+          ["1", "player 1", "45.0", "45.0", "A"],
+          ["2", "player 2", "0.0", "0.0", "A"],
+          ["2", "player 5", "0.0", "B", "A"],
+          ["2", "player 6", "0.0", "B", "A"],
+          ["2", "player 7", "0.0", "B", "B"],
+          ["2", "player 8", "0.0", "B", "B"],
+          ["7", "player 3", "-15.0", "-15.0", "B"],
+          ["8", "player 4", "-30.0", "-30.0", "B"],
+        ],
       ],
-      null,
-      null,
-    ],
-    [
-      "入力",
-      [
-        [null, null],
-        [null, null],
-      ],
-      [
-        ["1", "player 1", "0.0", "A", "A"],
-        ["1", "player 2", "0.0", "A", "A"],
-        ["1", "player 3", "0.0", "A", "B"],
-        ["1", "player 4", "0.0", "A", "B"],
-        ["1", "player 5", "0.0", "B", "A"],
-        ["1", "player 6", "0.0", "B", "A"],
-        ["1", "player 7", "0.0", "B", "B"],
-        ["1", "player 8", "0.0", "B", "B"],
-      ],
-      [0, 0, [40000, 30000, 20000, 10000]],
-      [
-        ["1", "player 1", "40.0", "40.0", "A"],
-        ["2", "player 2", "5.0", "5.0", "A"],
-        ["3", "player 5", "0.0", "B", "A"],
-        ["3", "player 6", "0.0", "B", "A"],
-        ["3", "player 7", "0.0", "B", "B"],
-        ["3", "player 8", "0.0", "B", "B"],
-        ["7", "player 3", "-15.0", "-15.0", "B"],
-        ["8", "player 4", "-30.0", "-30.0", "B"],
-      ],
-    ],
-    [
-      "更新",
-      [
-        [[40000, 30000, 20000, 10000], null],
-        [null, null],
-      ],
-      [
-        ["1", "player 1", "40.0", "40.0", "A"],
-        ["2", "player 2", "5.0", "5.0", "A"],
-        ["3", "player 5", "0.0", "B", "A"],
-        ["3", "player 6", "0.0", "B", "A"],
-        ["3", "player 7", "0.0", "B", "B"],
-        ["3", "player 8", "0.0", "B", "B"],
-        ["7", "player 3", "-15.0", "-15.0", "B"],
-        ["8", "player 4", "-30.0", "-30.0", "B"],
-      ],
-      [0, 0, [45000, 25000, 20000, 10000]],
-      [
-        ["1", "player 1", "45.0", "45.0", "A"],
-        ["2", "player 2", "0.0", "0.0", "A"],
-        ["2", "player 5", "0.0", "B", "A"],
-        ["2", "player 6", "0.0", "B", "A"],
-        ["2", "player 7", "0.0", "B", "B"],
-        ["2", "player 8", "0.0", "B", "B"],
-        ["7", "player 3", "-15.0", "-15.0", "B"],
-        ["8", "player 4", "-30.0", "-30.0", "B"],
-      ],
-    ],
-  ])(`%s`, (_, scores, expectedBefore, savedScore, expectedAfter) => {
-    const contestBefore = structuredClone(contest);
-    scores.forEach((result, i) =>
-      result.forEach((table, j) => {
-        contestBefore.results[i][j].scores = table;
-      }),
-    );
-    const sendSnapshot = mockOnSnapshot();
-    render(
-      <MemoryRouter initialEntries={["/result/hoge"]}>
-        <Routes>
-          <Route path="/result/:id" element={<Result />} />
-        </Routes>
-      </MemoryRouter>,
-    );
-    act(() => {
-      sendSnapshot["master"]({
-        players,
-        rules: [],
+    ])(`%s`, (_, scores, expectedBefore, savedScore, expectedAfter) => {
+      const contestBefore = structuredClone(contest);
+      scores.forEach((result, i) =>
+        result.forEach((table, j) => {
+          contestBefore.results[i][j].scores = table;
+        }),
+      );
+      const sendSnapshot = mockOnSnapshot();
+      render(
+        <MemoryRouter initialEntries={["/result/hoge"]}>
+          <Routes>
+            <Route path="/result/:id" element={<Result />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+      act(() => {
+        sendSnapshot["master"]({
+          players,
+          rules: [],
+        });
       });
+      act(() => sendSnapshot["hoge"](contestBefore));
+      expect(getTable()).toEqual([
+        ["順位", "名前", "合計", "1回戦", "2回戦"],
+        ...expectedBefore,
+      ]);
+      if (savedScore === null) return;
+      act(() => {
+        const contestAfter = structuredClone(contestBefore);
+        const [round, table, newScores] = savedScore;
+        contestAfter.results[round][table].scores = newScores;
+        sendSnapshot["hoge"](contestAfter);
+      });
+      expect(getTable()).toEqual([
+        ["順位", "名前", "合計", "1回戦", "2回戦"],
+        ...expectedAfter,
+      ]);
     });
-    act(() => sendSnapshot["hoge"](contestBefore));
-    expect(getTable()).toEqual([
-      ["順位", "名前", "合計", "1回戦", "2回戦"],
-      ...expectedBefore,
-    ]);
-    if (savedScore === null) return;
-    act(() => {
-      const contestAfter = structuredClone(contestBefore);
-      const [round, table, newScores] = savedScore;
-      contestAfter.results[round][table].scores = newScores;
-      sendSnapshot["hoge"](contestAfter);
+  });
+
+  describe("pair", () => {
+    type Table = FlatTuple<
+      [
+        rank: string,
+        name: string,
+        total: string,
+        round1: string,
+        round2: string,
+      ],
+      [name: string, round1: string, round2: string],
+      8
+    >;
+    type TestCase = [name: string, scores: Results, expected: Table];
+    it.each<TestCase>([
+      [
+        "開始",
+        [
+          [null, null],
+          [null, null],
+        ],
+        [
+          ["1", "player 1", "0.0", "A", "A"],
+          ["player 2", "A", "A"],
+          ["1", "player 3", "0.0", "A", "B"],
+          ["player 4", "A", "B"],
+          ["1", "player 5", "0.0", "B", "A"],
+          ["player 6", "B", "A"],
+          ["1", "player 7", "0.0", "B", "B"],
+          ["player 8", "B", "B"],
+        ],
+      ],
+      [
+        "途中",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30100, 20000, 9900],
+          ],
+          [[40000, 30000, 20000, 10000], null],
+        ],
+        [
+          ["1", "player 1", "90.0", "40.0", "40.0"],
+          ["player 2", "5.0", "5.0"],
+          ["2", "player 5", "0.1", "40.0", "-15.0"],
+          ["player 6", "5.1", "-30.0"],
+          ["3", "player 3", "-45.0", "-15.0", "B"],
+          ["player 4", "-30.0", "B"],
+          ["4", "player 7", "-45.1", "-15.0", "B"],
+          ["player 8", "-30.1", "B"],
+        ],
+      ],
+      [
+        "終了",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+          [
+            [40000, 29000, 21000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+        ],
+        [
+          ["1", "player 1", "89.0", "40.0", "40.0"],
+          ["player 2", "5.0", "4.0"],
+          ["2", "player 5", "1.0", "40.0", "-14.0"],
+          ["player 6", "5.0", "-30.0"],
+          ["3", "player 3", "0.0", "-15.0", "40.0"],
+          ["player 4", "-30.0", "5.0"],
+          ["4", "player 7", "-90.0", "-15.0", "-15.0"],
+          ["player 8", "-30.0", "-30.0"],
+        ],
+      ],
+      [
+        "同率",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+        ],
+        [
+          ["1", "player 1", "90.0", "40.0", "40.0"],
+          ["player 2", "5.0", "5.0"],
+          ["2", "player 3", "0.0", "-15.0", "40.0"],
+          ["player 4", "-30.0", "5.0"],
+          ["2", "player 5", "0.0", "40.0", "-15.0"],
+          ["player 6", "5.0", "-30.0"],
+          ["4", "player 7", "-90.0", "-15.0", "-15.0"],
+          ["player 8", "-30.0", "-30.0"],
+        ],
+      ],
+    ])(`%s`, (_, scores, expected) => {
+      const contestBefore = structuredClone(contest);
+      scores.forEach((result, i) =>
+        result.forEach((table, j) => {
+          contestBefore.results[i][j].scores = table;
+        }),
+      );
+      contestBefore.rule = {
+        id: "pair",
+        pairs: [
+          [1, 2],
+          [3, 4],
+          [5, 6],
+          [7, 8],
+        ],
+      };
+      const sendSnapshot = mockOnSnapshot();
+      render(
+        <MemoryRouter initialEntries={["/result/hoge"]}>
+          <Routes>
+            <Route path="/result/:id" element={<Result />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+      act(() => {
+        sendSnapshot["master"]({
+          players,
+          rules: [],
+        });
+      });
+      act(() => sendSnapshot["hoge"](contestBefore));
+      expect(getTable()).toEqual([
+        ["順位", "名前", "合計", "1回戦", "2回戦"],
+        ...expected,
+      ]);
     });
-    expect(getTable()).toEqual([
-      ["順位", "名前", "合計", "1回戦", "2回戦"],
-      ...expectedAfter,
-    ]);
   });
 });
 
@@ -255,6 +399,9 @@ const contest: Contest = {
 
 type Tuple<T, N extends number, R extends T[] = []> =
   R["length"] extends N ? R : Tuple<T, N, [T, ...R]>;
+
+type FlatTuple<T, S, N extends number, R extends (T | S)[] = []> =
+  R["length"] extends N ? R : FlatTuple<T, S, N, [T, S, ...R]>;
 
 const getTable = () => {
   return [

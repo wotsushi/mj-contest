@@ -3,6 +3,7 @@ import { useContest } from "../contest";
 import { useParams } from "react-router";
 import { useMaster } from "../master";
 import NormalTable from "./NormalTable";
+import PairTable from "./PairTable";
 
 const Result: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,15 @@ const Result: React.FC = () => {
       }),
     ]),
   );
+  if (contest.rule?.id === "pair") {
+    return (
+      <PairTable
+        nameByID={nameByID}
+        pairs={contest.rule.pairs}
+        pointsByID={pointsByID}
+      />
+    );
+  }
   return (
     <NormalTable
       nameByID={nameByID}
