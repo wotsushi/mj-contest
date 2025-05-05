@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import PlayerSelect from "./PlayerSelect";
+import PlayerSelect from "../PlayerSelect";
 
 type Props = {
   nameByID: Map<number, string>;
@@ -8,7 +8,7 @@ type Props = {
   setPlayers: (players: number[]) => void;
 };
 
-const EditPlayers: React.FC<Props> = ({ nameByID, players, setPlayers }) => {
+const Normal: React.FC<Props> = ({ nameByID, players, setPlayers }) => {
   const effectivePlayers =
     players.length > 0 ? players : Array.from({ length: 16 }, (_, i) => i);
   return (
@@ -35,4 +35,4 @@ const Root = styled.div`
   row-gap: 8px;
 `;
 
-export default EditPlayers;
+export default Normal;

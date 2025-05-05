@@ -17,10 +17,12 @@ export type Rule =
   | {
       id: "normal";
     }
-  | {
-      id: "pair";
-      pairs: [number, number][];
-    };
+  | PairRule;
+
+export type PairRule = {
+  id: "pair";
+  pairs: [number, number][];
+};
 
 export const useContest = (id: string) => {
   const {

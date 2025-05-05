@@ -1,11 +1,12 @@
 import { useParams } from "react-router";
 import { useContest } from "../contest";
-import EditPlayers from "./EditPlayers";
 import { useMaster } from "../master";
 import { generateTable } from "./table";
 import EditTable from "./EditTable";
 import CopyContest from "./CopyContest";
 import EditDate from "./EditDate";
+import EditRule from "./EditRule";
+import EditPlayers from "./EditPlayers";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,10 @@ const EditContest: React.FC = () => {
         date={contest.date}
         setDate={(date) => mutate((next) => (next.date = date))}
       />
+      <EditRule
+        rule={contest.rule}
+        setRule={(rule) => mutate((next) => (next.rule = rule))}
+      />
       <EditPlayers
         nameByID={nameByID}
         players={contest.players}
@@ -26,6 +31,8 @@ const EditContest: React.FC = () => {
             next.players = players;
           })
         }
+        rule={contest.rule}
+        setRule={(rule) => mutate((next) => (next.rule = rule))}
       />
       {contest.results.map((results, i) => (
         <div key={i}>
