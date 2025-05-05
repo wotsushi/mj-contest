@@ -1,3 +1,4 @@
+import TextInput from "../../components/TextInput";
 import { Result } from "../../contest";
 import PlayerSelect from "../PlayerSelect";
 
@@ -10,19 +11,11 @@ type Props = {
 const EditTable: React.FC<Props> = ({ nameByID, result, setResult }) => {
   return (
     <div>
-      <div>
-        <input
-          type="text"
-          value={result.table}
-          size={10}
-          onChange={(e) =>
-            setResult({
-              ...result,
-              table: e.target.value,
-            })
-          }
-        />
-      </div>
+      <TextInput
+        text={result.table}
+        setText={(table: string) => setResult({ ...result, table })}
+        size={10}
+      />
       {result.players.map((player, i) => (
         <PlayerSelect
           key={i}

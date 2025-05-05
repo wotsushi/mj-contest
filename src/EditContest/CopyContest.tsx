@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { copyDoc } from "../firebase";
+import TextInput from "../components/TextInput";
 
 type Props = {
   srcID: string;
@@ -9,14 +10,7 @@ const CopyContest: React.FC<Props> = ({ srcID }) => {
   const [dstID, setDstID] = useState("");
   return (
     <div>
-      <div>
-        <input
-          type="text"
-          value={dstID}
-          size={25}
-          onChange={(e) => setDstID(e.target.value)}
-        />
-      </div>
+      <TextInput text={dstID} setText={setDstID} size={25} />
       <button type="button" onClick={() => copyDoc(srcID, dstID)}>
         コピー
       </button>
