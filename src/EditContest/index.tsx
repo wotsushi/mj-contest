@@ -4,6 +4,7 @@ import EditPlayers from "./EditPlayers";
 import { useMaster } from "../master";
 import { generateTable } from "./table";
 import EditTable from "./EditTable";
+import CopyContest from "./CopyContest";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,6 +65,7 @@ const EditContest: React.FC = () => {
       <button type="button" onClick={() => saveContest()}>
         保存
       </button>
+      <CopyContest srcID={id} />
     </div>
   );
 };

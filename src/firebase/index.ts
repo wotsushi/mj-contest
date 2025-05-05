@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import {
   doc,
+  getDoc,
   getFirestore,
   onSnapshot,
   setDoc,
@@ -32,6 +33,14 @@ export const useDoc = <T>(id: string) => {
     updateDoc(ref, { [field]: serialize(get(state, keys)) });
   };
   return { state, setter, put, update };
+};
+
+export const copyDoc = async (srcID: string, dstID: string) => {
+  const srcRef = doc(db, collection, srcID);
+  const dstRef = doc(db, collection, dstID);
+  const src = await getDoc(srcRef);
+  await setDoc(dstRef, src.data());
+  alert("コピーしました");
 };
 
 const firebaseConfig = {
