@@ -5,6 +5,7 @@ import { useMaster } from "../master";
 import { generateTable } from "./table";
 import EditTable from "./EditTable";
 import CopyContest from "./CopyContest";
+import EditDate from "./EditDate";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,10 @@ const EditContest: React.FC = () => {
   if (id === undefined || contest === null || nameByID === null) return null;
   return (
     <div>
+      <EditDate
+        date={contest.date}
+        setDate={(date) => mutate((next) => (next.date = date))}
+      />
       <EditPlayers
         nameByID={nameByID}
         players={contest.players}
