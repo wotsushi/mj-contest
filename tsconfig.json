@@ -3,8 +3,5 @@
   "compilerOptions": {
     "esModuleInterop": true
   },
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.jest.json" }
-  ]
+  "references": [{ "path": "./tsconfig.app.json" }]
 }
