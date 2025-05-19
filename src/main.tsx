@@ -1,12 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App.tsx";
+import App from "./App";
 import { BrowserRouter, Routes } from "react-router";
 import { Route } from "react-router";
-import Result from "./Result/index.tsx";
+import Result from "./Result";
 import Form from "./Form";
-import EditContest from "./EditContest/index.tsx";
+import EditContest from "./EditContest";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
