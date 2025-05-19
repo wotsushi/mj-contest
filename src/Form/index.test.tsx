@@ -222,4 +222,8 @@ const contest: Contest = {
       },
     ],
   ],
+  rule: {
+    id: "normal",
+    uma: [10, 5, -5, -10],
+  },
 };

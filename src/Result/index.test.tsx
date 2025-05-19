@@ -331,6 +331,7 @@ describe("<Result />", () => {
           [5, 6],
           [7, 8],
         ],
+        uma: [10, 5, -5, -10],
       };
       const sendSnapshot = mockOnSnapshot();
       render(
@@ -395,6 +396,10 @@ const contest: Contest = {
       },
     ],
   ],
+  rule: {
+    id: "normal",
+    uma: [10, 5, -5, -10],
+  },
 };
 
 type Tuple<T, N extends number, R extends T[] = []> =

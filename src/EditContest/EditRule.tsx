@@ -1,7 +1,7 @@
 import { Rule } from "../contest";
 
 type Props = {
-  rule: Rule | undefined;
+  rule: Rule;
   setRule: (rule: Rule) => void;
 };
 
@@ -13,7 +13,7 @@ const EditRule: React.FC<Props> = ({ rule, setRule }) => (
         name="rule"
         value="normal"
         checked={rule === undefined || rule.id === "normal"}
-        onChange={() => setRule({ id: "normal" })}
+        onChange={() => setRule({ id: "normal", uma: rule.uma })}
       />
       通常
     </label>
@@ -22,8 +22,8 @@ const EditRule: React.FC<Props> = ({ rule, setRule }) => (
         type="radio"
         name="rule"
         value="pair"
-        checked={rule?.id === "pair"}
-        onChange={() => setRule({ id: "pair", pairs: [] })}
+        checked={rule.id === "pair"}
+        onChange={() => setRule({ id: "pair", pairs: [], uma: rule.uma })}
       />
       ペア
     </label>

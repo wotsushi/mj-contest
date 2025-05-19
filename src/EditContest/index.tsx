@@ -7,6 +7,7 @@ import CopyContest from "./CopyContest";
 import EditDate from "./EditDate";
 import EditRule from "./EditRule";
 import EditPlayers from "./EditPlayers";
+import EditUma from "./EditUma";
 
 const EditContest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,10 @@ const EditContest: React.FC = () => {
       <EditDate
         date={contest.date}
         setDate={(date) => mutate((next) => (next.date = date))}
+      />
+      <EditUma
+        uma={contest.rule.uma}
+        setUma={(uma) => mutate((next) => (next.rule.uma = uma))}
       />
       <EditRule
         rule={contest.rule}

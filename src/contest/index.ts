@@ -4,7 +4,7 @@ export type Contest = {
   date: string;
   players: number[];
   results: Result[][];
-  rule?: Rule;
+  rule: Rule;
 };
 
 export type Result = {
@@ -16,12 +16,14 @@ export type Result = {
 export type Rule =
   | {
       id: "normal";
+      uma: [number, number, number, number];
     }
   | PairRule;
 
 export type PairRule = {
   id: "pair";
   pairs: [number, number][];
+  uma: [number, number, number, number];
 };
 
 export const useContest = (id: string) => {

@@ -25,6 +25,7 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [],
           results: [],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
           next.date = "2025-03-22";
@@ -33,11 +34,13 @@ describe("useContest", () => {
           date: "2025-03-22",
           players: [],
           results: [],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         {
           date: "2025-03-22",
           players: {},
           results: {},
+          rule: { id: "normal", uma: { 0: 10, 1: 5, 2: -5, 3: -10 } },
         },
       ],
       [
@@ -46,6 +49,7 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [1, 2],
           results: [],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
           next.players = [2, 3];
@@ -54,11 +58,13 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [2, 3],
           results: [],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         {
           date: "2025-03-21",
           players: { 0: 2, 1: 3 },
           results: {},
+          rule: { id: "normal", uma: { 0: 10, 1: 5, 2: -5, 3: -10 } },
         },
       ],
       [
@@ -67,6 +73,7 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [1, 2, 3, 4, 5, 6, 7, 8, 9],
           results: [[{ table: "A", players: [1, 2, 3, 4], scores: null }], []],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
           next.results[0].push({
@@ -88,6 +95,7 @@ describe("useContest", () => {
             [],
             [],
           ],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         {
           date: "2025-03-21",
@@ -107,6 +115,35 @@ describe("useContest", () => {
             },
             1: {},
             2: {},
+          },
+          rule: { id: "normal", uma: { 0: 10, 1: 5, 2: -5, 3: -10 } },
+        },
+      ],
+      [
+        "rule",
+        {
+          date: "2025-03-21",
+          players: [],
+          results: [],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
+        },
+        (next: Contest) => {
+          next.rule = { id: "pair", pairs: [[0, 1]], uma: [30, 10, -10, -30] };
+        },
+        {
+          date: "2025-03-21",
+          players: [],
+          results: [],
+          rule: { id: "pair", pairs: [[0, 1]], uma: [30, 10, -10, -30] },
+        },
+        {
+          date: "2025-03-21",
+          players: {},
+          results: {},
+          rule: {
+            id: "pair",
+            pairs: { 0: { 0: 0, 1: 1 } },
+            uma: { 0: 30, 1: 10, 2: -10, 3: -30 },
           },
         },
       ],
@@ -142,6 +179,7 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [1, 2, 3, 4],
           results: [[{ table: "A", players: [1, 2, 3, 4], scores: null }]],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
           next.results[0][0].scores = [10000, 20000, 30000, 40000];
@@ -160,6 +198,7 @@ describe("useContest", () => {
               },
             ],
           ],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         { "results.0.0.scores": { 0: 10000, 1: 20000, 2: 30000, 3: 40000 } },
         { "results.0.0.players": { 0: 1, 1: 2, 2: 3, 3: 4 } },
@@ -180,6 +219,7 @@ describe("useContest", () => {
               },
             ],
           ],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
           next.results[1][1].scores = [50000, 40000, 20000, -10000];
@@ -200,6 +240,7 @@ describe("useContest", () => {
               },
             ],
           ],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         { "results.1.1.scores": { 0: 50000, 1: 40000, 2: 20000, 3: -10000 } },
         { "results.1.1.players": { 0: 1, 1: 2, 2: 3, 3: 4 } },
@@ -210,6 +251,7 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [1, 2, 3, 4],
           results: [[{ table: "A", players: [1, 2, 3, 4], scores: null }]],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
           next.results[0][0].players = [4, 3, 2, 1];
@@ -220,6 +262,7 @@ describe("useContest", () => {
           date: "2025-03-21",
           players: [1, 2, 3, 4],
           results: [[{ table: "A", players: [4, 3, 2, 1], scores: null }]],
+          rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         { "results.0.0.scores": null },
         { "results.0.0.players": { 0: 4, 1: 3, 2: 2, 3: 1 } },
