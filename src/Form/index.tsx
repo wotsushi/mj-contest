@@ -34,6 +34,7 @@ const Form: React.FC = () => {
         key={`${round} ${table}`}
         nameByID={nameByID}
         result={result}
+        rule={contest.rule}
         setPlayers={(players) =>
           mutateContest((next) => {
             next.results[round][table].players = players;

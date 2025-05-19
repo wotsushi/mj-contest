@@ -2,12 +2,13 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { calcPoints, totalInitialScore } from "../../point";
 import ScoreInput from "./ScoreInput";
-import { Result } from "../../contest";
+import { Result, Rule } from "../../contest";
 import WindSelect from "./WindSelect";
 
 type Props = {
   nameByID: Map<number, string>;
   result: Result;
+  rule: Rule;
   setPlayers: (players: number[]) => void;
   setScores: (scores: number[] | null) => void;
   saveScores: () => void;
@@ -16,6 +17,7 @@ type Props = {
 const Table: React.FC<Props> = ({
   nameByID,
   result,
+  rule,
   setPlayers,
   setScores,
   saveScores,
@@ -45,7 +47,10 @@ const Table: React.FC<Props> = ({
   const showPoints = scores.every((score) => score !== null && !isNaN(score));
   const points =
     showPoints ?
-      calcPoints(scores.filter((s) => s !== null))
+      calcPoints(
+        scores.filter((s) => s !== null),
+        rule,
+      )
     : scores.map(() => null);
   const total = scores.filter((s) => s !== null).reduce((sum, s) => sum + s, 0);
   return (

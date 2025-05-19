@@ -17,7 +17,7 @@ const Result: React.FC = () => {
         const game = result.find(({ players }) => players.includes(id));
         if (game === undefined) return "";
         if (game.scores === null) return game.table;
-        const points = calcPoints(game.scores);
+        const points = calcPoints(game.scores, contest.rule);
         return points[game.players.indexOf(id)];
       }),
     ]),
