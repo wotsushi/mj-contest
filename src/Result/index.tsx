@@ -1,12 +1,14 @@
 import { calcPoints } from "../point";
 import { useContest } from "../contest";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useMaster } from "../master";
 import NormalTable from "./NormalTable";
 import PairTable from "./PairTable";
+import PairTable2 from "./PairTable2";
 
 const Result: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [params] = useSearchParams();
   const { nameByID } = useMaster();
   const { contest } = useContest(id ?? "");
   if (nameByID === null || contest === null) return null;
@@ -23,6 +25,15 @@ const Result: React.FC = () => {
     ]),
   );
   if (contest.rule?.id === "pair") {
+    if (params.has("subtotal")) {
+      return (
+        <PairTable2
+          nameByID={nameByID}
+          pairs={contest.rule.pairs}
+          pointsByID={pointsByID}
+        />
+      );
+    }
     return (
       <PairTable
         nameByID={nameByID}
