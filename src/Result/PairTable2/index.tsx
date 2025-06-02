@@ -35,11 +35,24 @@ const PairTable2: React.FC<Props> = ({ nameByID, pairs, pointsByID }) => {
         points: points ?? [],
       };
     })
-    .sort((a, b) => (b.total ?? 0) - (a.total ?? 0));
+    .sort((a, b) => (b.total ?? 0) - (a.total ?? 0))
+    .reduce<RowProps[]>((res, row, i) => {
+      const last = res.at(-1);
+      return res.concat([
+        {
+          ...row,
+          rank:
+            last == undefined ? 1
+            : row.total === last.total ? last.rank
+            : i + 1,
+        },
+      ]);
+    }, []);
   return (
     <Table>
       <thead>
         <tr>
+          <Th>順位</Th>
           <Team>チーム</Team>
           <Player>名前</Player>
           <Th>合計</Th>
@@ -53,6 +66,7 @@ const PairTable2: React.FC<Props> = ({ nameByID, pairs, pointsByID }) => {
         {rows.map((row) => (
           <Row
             key={`${row.team}`}
+            rank={row.rank}
             team={row.team}
             names={row.names}
             total={row.total}
