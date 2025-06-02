@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import Row from "./Row";
+import { Pair } from "../../contest";
 
 type Props = {
   nameByID: Map<number, string>;
-  pairs: [number, number][];
+  pairs: Pair[];
   pointsByID: Map<number, (number | string)[]>;
 };
 
 const PairTable: React.FC<Props> = ({ nameByID, pairs, pointsByID }) => {
   const rows = pairs
-    .map<Omit<RowProps, "rank">>(([x, y]) => {
+    .map<Omit<RowProps, "rank">>(({ players: [x, y] }) => {
       const points: RowProps["points"] = [
         pointsByID.get(x)!,
         pointsByID.get(y)!,
@@ -52,7 +53,7 @@ const PairTable: React.FC<Props> = ({ nameByID, pairs, pointsByID }) => {
       <tbody>
         {rows.map((row, i) => (
           <Row
-            key={`${pairs[i][0]}-${pairs[i][1]}`}
+            key={`${pairs[i].players[0]}-${pairs[i].players[1]}`}
             rank={row.rank}
             names={row.names}
             total={row.total}

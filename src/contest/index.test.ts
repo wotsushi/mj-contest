@@ -128,13 +128,21 @@ describe("useContest", () => {
           rule: { id: "normal", uma: [10, 5, -5, -10] },
         },
         (next: Contest) => {
-          next.rule = { id: "pair", pairs: [[0, 1]], uma: [30, 10, -10, -30] };
+          next.rule = {
+            id: "pair",
+            pairs: [{ team: "A", players: [0, 1] }],
+            uma: [30, 10, -10, -30],
+          };
         },
         {
           date: "2025-03-21",
           players: [],
           results: [],
-          rule: { id: "pair", pairs: [[0, 1]], uma: [30, 10, -10, -30] },
+          rule: {
+            id: "pair",
+            pairs: [{ team: "A", players: [0, 1] }],
+            uma: [30, 10, -10, -30],
+          },
         },
         {
           date: "2025-03-21",
@@ -142,7 +150,7 @@ describe("useContest", () => {
           results: {},
           rule: {
             id: "pair",
-            pairs: { 0: { 0: 0, 1: 1 } },
+            pairs: { 0: { team: "A", players: { 0: 0, 1: 1 } } },
             uma: { 0: 30, 1: 10, 2: -10, 3: -30 },
           },
         },

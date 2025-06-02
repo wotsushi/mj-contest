@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import React from "react";
 import PlayerSelect from "../PlayerSelect";
-import { PairRule, Rule } from "../../contest";
+import { Pair, PairRule, Rule } from "../../contest";
+import TextInput from "../../components/TextInput";
 
 type Props = {
   nameByID: Map<number, string>;
@@ -11,38 +12,50 @@ type Props = {
 };
 
 const Pairs: React.FC<Props> = ({ nameByID, rule, setRule, setPlayers }) => {
-  const effectivePairs: PairRule["pairs"] =
+  const effectivePairs: Pair[] =
     rule.pairs.length > 0 ?
       rule.pairs
-    : Array.from({ length: 8 }, () => [1, 1]);
-  const toPlayers = (pairs: [number, number][]) =>
-    playersIdx.map(([i, j]) => pairs[i][j]);
+    : Array.from({ length: 8 }, () => ({ team: "", players: [1, 1] }));
+  const toPlayers = (pairs: Pair[]) =>
+    playersIdx.map(([i, j]) => pairs[i].players[j]);
+  const setTeam = (team: string, pairsIdx: number) => {
+    const nextRule = structuredClone(rule);
+    nextRule.pairs = effectivePairs;
+    nextRule.pairs[pairsIdx].team = team;
+    setRule(nextRule);
+  };
   const setPlayer = (player: number, pairsIdx: number, i: number) => {
     const nextRule = structuredClone(rule);
     nextRule.pairs = effectivePairs;
-    nextRule.pairs[pairsIdx][i] = player;
+    nextRule.pairs[pairsIdx].players[i] = player;
     setRule(nextRule);
     setPlayers(toPlayers(nextRule.pairs));
   };
   return (
     <Root>
-      {effectivePairs.map((pair, i) =>
-        pair.map((player, j) => (
-          <PlayerSelect
-            key={`${i}-${j}`}
-            nameByID={nameByID}
-            current={player}
-            set={(p: number) => setPlayer(p, i, j)}
+      {effectivePairs.map((pair, i) => (
+        <React.Fragment key={i}>
+          <TextInput
+            text={pair.team}
+            setText={(team: string) => setTeam(team, i)}
           />
-        )),
-      )}
+          {pair.players.map((player, j) => (
+            <PlayerSelect
+              key={`${i}-${j}`}
+              nameByID={nameByID}
+              current={player}
+              set={(p: number) => setPlayer(p, i, j)}
+            />
+          ))}
+        </React.Fragment>
+      ))}
     </Root>
   );
 };
 
 const Root = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   gap: 8px;
 `;
 

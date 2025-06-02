@@ -22,8 +22,13 @@ export type Rule =
 
 export type PairRule = {
   id: "pair";
-  pairs: [number, number][];
+  pairs: Pair[];
   uma: [number, number, number, number];
+};
+
+export type Pair = {
+  team: string;
+  players: [number, number];
 };
 
 export const useContest = (id: string) => {

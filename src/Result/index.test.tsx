@@ -326,10 +326,10 @@ describe("<Result />", () => {
       contestBefore.rule = {
         id: "pair",
         pairs: [
-          [1, 2],
-          [3, 4],
-          [5, 6],
-          [7, 8],
+          { team: "A", players: [1, 2] },
+          { team: "B", players: [3, 4] },
+          { team: "C", players: [5, 6] },
+          { team: "D", players: [7, 8] },
         ],
         uma: [10, 5, -5, -10],
       };

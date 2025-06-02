@@ -1,20 +1,18 @@
 import styled from "styled-components";
 
 type Props = {
-  rank: number;
+  team: string;
   names: [string | undefined, string | undefined];
   total: number;
   subtotal: [number, number];
   points: [(number | string)[], (number | string)[]];
 };
 
-const Row: React.FC<Props> = ({ rank, names, total, subtotal, points }) => {
+const Row: React.FC<Props> = ({ team, names, total, subtotal, points }) => {
   return (
     <>
       <Tr>
-        <Rank $rank={rank} rowSpan={2}>
-          {rank}
-        </Rank>
+        <Team rowSpan={2}>{team}</Team>
         <Name>{names[0]}</Name>
         <Total rowSpan={2}>
           <NumberLabel $negative={total < 0}>{total.toFixed(1)}</NumberLabel>
@@ -83,9 +81,8 @@ const Cell = styled.td`
   color: #434343;
 `;
 
-const Rank = styled(Cell)<{ $rank: number }>`
+const Team = styled(Cell)`
   font-weight: bold;
-  color: ${({ $rank }) => ["#d4af37", "#a9a9a9", "#8b5a2b"].at($rank - 1)};
 `;
 
 const Name = styled(Cell)`
