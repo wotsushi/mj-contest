@@ -18,7 +18,8 @@ export type Rule =
       id: "normal";
       uma: [number, number, number, number];
     }
-  | PairRule;
+  | PairRule
+  | TeamRule;
 
 export type PairRule = {
   id: "pair";
@@ -29,6 +30,17 @@ export type PairRule = {
 export type Pair = {
   team: string;
   players: [number, number];
+};
+
+export type TeamRule = {
+  id: "team";
+  teams: Team[];
+  uma: [number, number, number, number];
+};
+
+export type Team = {
+  team: string;
+  players: number[];
 };
 
 export const useContest = (id: string) => {
