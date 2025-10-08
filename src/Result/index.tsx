@@ -5,6 +5,7 @@ import { useMaster } from "../master";
 import NormalTable from "./NormalTable";
 import PairTable from "./PairTable";
 import PairTable2 from "./PairTable2";
+import TeamTable from "./TeamTable";
 
 const Result: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,6 +25,15 @@ const Result: React.FC = () => {
       }),
     ]),
   );
+  if (contest.rule?.id === "team") {
+    return (
+      <TeamTable
+        nameByID={nameByID}
+        teams={contest.rule.teams}
+        pointsByID={pointsByID}
+      />
+    );
+  }
   if (contest.rule?.id === "pair") {
     if (params.has("subtotal")) {
       return (
