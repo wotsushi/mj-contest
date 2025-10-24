@@ -223,12 +223,14 @@ describe("<Result />", () => {
     type Table = FlatTuple<
       [
         rank: string,
+        team: string,
         name: string,
         total: string,
+        subtotal: string,
         round1: string,
         round2: string,
       ],
-      [name: string, round1: string, round2: string],
+      [name: string, subtotal: string, round1: string, round2: string],
       8
     >;
     type TestCase = [name: string, scores: Results, expected: Table];
@@ -240,14 +242,14 @@ describe("<Result />", () => {
           [null, null],
         ],
         [
-          ["1", "player 1", "0.0", "A", "A"],
-          ["player 2", "A", "A"],
-          ["1", "player 3", "0.0", "A", "B"],
-          ["player 4", "A", "B"],
-          ["1", "player 5", "0.0", "B", "A"],
-          ["player 6", "B", "A"],
-          ["1", "player 7", "0.0", "B", "B"],
-          ["player 8", "B", "B"],
+          ["1", "team A", "player 1", "0.0", "0.0", "A", "A"],
+          ["player 2", "0.0", "A", "A"],
+          ["1", "team B", "player 3", "0.0", "0.0", "A", "B"],
+          ["player 4", "0.0", "A", "B"],
+          ["1", "team C", "player 5", "0.0", "0.0", "B", "A"],
+          ["player 6", "0.0", "B", "A"],
+          ["1", "team D", "player 7", "0.0", "0.0", "B", "B"],
+          ["player 8", "0.0", "B", "B"],
         ],
       ],
       [
@@ -260,14 +262,14 @@ describe("<Result />", () => {
           [[40000, 30000, 20000, 10000], null],
         ],
         [
-          ["1", "player 1", "90.0", "40.0", "40.0"],
-          ["player 2", "5.0", "5.0"],
-          ["2", "player 5", "0.1", "40.0", "-15.0"],
-          ["player 6", "5.1", "-30.0"],
-          ["3", "player 3", "-45.0", "-15.0", "B"],
-          ["player 4", "-30.0", "B"],
-          ["4", "player 7", "-45.1", "-15.0", "B"],
-          ["player 8", "-30.1", "B"],
+          ["1", "team A", "player 1", "90.0", "80.0", "40.0", "40.0"],
+          ["player 2", "10.0", "5.0", "5.0"],
+          ["2", "team C", "player 5", "0.1", "25.0", "40.0", "-15.0"],
+          ["player 6", "-24.9", "5.1", "-30.0"],
+          ["3", "team B", "player 3", "-45.0", "-15.0", "-15.0", "B"],
+          ["player 4", "-30.0", "-30.0", "B"],
+          ["4", "team D", "player 7", "-45.1", "-15.0", "-15.0", "B"],
+          ["player 8", "-30.1", "-30.1", "B"],
         ],
       ],
       [
@@ -283,14 +285,14 @@ describe("<Result />", () => {
           ],
         ],
         [
-          ["1", "player 1", "89.0", "40.0", "40.0"],
-          ["player 2", "5.0", "4.0"],
-          ["2", "player 5", "1.0", "40.0", "-14.0"],
-          ["player 6", "5.0", "-30.0"],
-          ["3", "player 3", "0.0", "-15.0", "40.0"],
-          ["player 4", "-30.0", "5.0"],
-          ["4", "player 7", "-90.0", "-15.0", "-15.0"],
-          ["player 8", "-30.0", "-30.0"],
+          ["1", "team A", "player 1", "89.0", "80.0", "40.0", "40.0"],
+          ["player 2", "9.0", "5.0", "4.0"],
+          ["2", "team C", "player 5", "1.0", "26.0", "40.0", "-14.0"],
+          ["player 6", "-25.0", "5.0", "-30.0"],
+          ["3", "team B", "player 3", "0.0", "25.0", "-15.0", "40.0"],
+          ["player 4", "-25.0", "-30.0", "5.0"],
+          ["4", "team D", "player 7", "-90.0", "-30.0", "-15.0", "-15.0"],
+          ["player 8", "-60.0", "-30.0", "-30.0"],
         ],
       ],
       [
@@ -306,14 +308,14 @@ describe("<Result />", () => {
           ],
         ],
         [
-          ["1", "player 1", "90.0", "40.0", "40.0"],
-          ["player 2", "5.0", "5.0"],
-          ["2", "player 3", "0.0", "-15.0", "40.0"],
-          ["player 4", "-30.0", "5.0"],
-          ["2", "player 5", "0.0", "40.0", "-15.0"],
-          ["player 6", "5.0", "-30.0"],
-          ["4", "player 7", "-90.0", "-15.0", "-15.0"],
-          ["player 8", "-30.0", "-30.0"],
+          ["1", "team A", "player 1", "90.0", "80.0", "40.0", "40.0"],
+          ["player 2", "10.0", "5.0", "5.0"],
+          ["2", "team B", "player 3", "0.0", "25.0", "-15.0", "40.0"],
+          ["player 4", "-25.0", "-30.0", "5.0"],
+          ["2", "team C", "player 5", "0.0", "25.0", "40.0", "-15.0"],
+          ["player 6", "-25.0", "5.0", "-30.0"],
+          ["4", "team D", "player 7", "-90.0", "-30.0", "-15.0", "-15.0"],
+          ["player 8", "-60.0", "-30.0", "-30.0"],
         ],
       ],
     ])(`%s`, (_, scores, expected) => {
@@ -326,10 +328,10 @@ describe("<Result />", () => {
       contestBefore.rule = {
         id: "pair",
         pairs: [
-          { team: "A", players: [1, 2] },
-          { team: "B", players: [3, 4] },
-          { team: "C", players: [5, 6] },
-          { team: "D", players: [7, 8] },
+          { team: "team A", players: [1, 2] },
+          { team: "team B", players: [3, 4] },
+          { team: "team C", players: [5, 6] },
+          { team: "team D", players: [7, 8] },
         ],
         uma: [10, 5, -5, -10],
       };
@@ -349,7 +351,7 @@ describe("<Result />", () => {
       });
       act(() => sendSnapshot["hoge"](contestBefore));
       expect(getTable()).toEqual([
-        ["順位", "名前", "合計", "1回戦", "2回戦"],
+        ["順位", "チーム", "名前", "合計", "小計", "1回戦", "2回戦"],
         ...expected,
       ]);
     });

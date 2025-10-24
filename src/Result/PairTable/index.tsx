@@ -10,18 +10,28 @@ type Props = {
 
 const PairTable: React.FC<Props> = ({ nameByID, pairs, pointsByID }) => {
   const rows = pairs
-    .map<Omit<RowProps, "rank">>(({ players: [x, y] }) => {
+    .map<Omit<RowProps, "rank">>((pair) => {
+      const [x, y] = pair.players;
       const points: RowProps["points"] = [
         pointsByID.get(x)!,
         pointsByID.get(y)!,
       ];
       return {
+        team: pair.team,
         names: [nameByID.get(x), nameByID.get(y)],
         total:
           points
             .flat()
             ?.filter((point) => typeof point === "number")
             .reduce((total, point) => point + total, 0) ?? 0,
+        subtotal: [
+          points[0]
+            .filter((point) => typeof point === "number")
+            .reduce((total, point) => point + total, 0) ?? 0,
+          points[1]
+            .filter((point) => typeof point === "number")
+            .reduce((total, point) => point + total, 0) ?? 0,
+        ],
         points: points ?? [],
       };
     })
@@ -43,20 +53,24 @@ const PairTable: React.FC<Props> = ({ nameByID, pairs, pointsByID }) => {
       <thead>
         <tr>
           <Th>順位</Th>
-          <Th>名前</Th>
+          <Team>チーム</Team>
+          <Player>名前</Player>
           <Th>合計</Th>
+          <Th>小計</Th>
           {rows[0].points[0].map((_, i) => (
             <Th key={i}>{i + 1}回戦</Th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {rows.map((row, i) => (
+        {rows.map((row) => (
           <Row
-            key={`${pairs[i].players[0]}-${pairs[i].players[1]}`}
+            key={`${row.team}`}
             rank={row.rank}
+            team={row.team}
             names={row.names}
             total={row.total}
+            subtotal={row.subtotal}
             points={row.points}
           />
         ))}
@@ -75,6 +89,14 @@ const Table = styled.table`
 const Th = styled.th`
   color: #fff;
   background-color: #356854;
+`;
+
+const Team = styled(Th)`
+  width: 15vw;
+`;
+
+const Player = styled(Th)`
+  width: 12.5vw;
 `;
 
 type RowProps = React.ComponentProps<typeof Row>;
