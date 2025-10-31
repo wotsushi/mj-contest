@@ -505,6 +505,58 @@ describe("<Result />", () => {
       ]);
     });
   });
+
+  describe("option", () => {
+    it("個人成機表示", () => {
+      const scores = [
+        [
+          [40000, 30000, 20000, 10000],
+          [40000, 30100, 20000, 9900],
+        ],
+        [[40000, 30000, 20000, 10000], null],
+      ];
+      const contestBefore = structuredClone(contest);
+      scores.forEach((result, i) =>
+        result.forEach((table, j) => {
+          contestBefore.results[i][j].scores = table;
+        }),
+      );
+      contestBefore.rule = {
+        id: "team",
+        teams: [
+          { team: "team A", players: [1, 2, 3, 4] },
+          { team: "team B", players: [5, 6, 7, 8] },
+        ],
+        uma: [10, 5, -5, -10],
+      };
+      const sendSnapshot = mockOnSnapshot();
+      render(
+        <MemoryRouter initialEntries={["/result/hoge?individual"]}>
+          <Routes>
+            <Route path="/result/:id" element={<Result />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+      act(() => {
+        sendSnapshot["master"]({
+          players,
+          rules: [],
+        });
+      });
+      act(() => sendSnapshot["hoge"](contestBefore));
+      expect(getTable()).toEqual([
+        ["順位", "名前", "合計", "1回戦", "2回戦"],
+        ["1", "player 1", "80.0", "40.0", "40.0"],
+        ["2", "player 5", "25.0", "40.0", "-15.0"],
+        ["3", "player 2", "10.0", "5.0", "5.0"],
+        ["4", "player 3", "-15.0", "-15.0", "B"],
+        ["4", "player 7", "-15.0", "-15.0", "B"],
+        ["6", "player 6", "-24.9", "5.1", "-30.0"],
+        ["7", "player 4", "-30.0", "-30.0", "B"],
+        ["8", "player 8", "-30.1", "-30.1", "B"],
+      ]);
+    });
+  });
 });
 
 const players = [

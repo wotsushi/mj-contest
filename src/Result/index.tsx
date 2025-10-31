@@ -1,6 +1,6 @@
 import { calcPoints } from "../point";
 import { useContest } from "../contest";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useMaster } from "../master";
 import NormalTable from "./NormalTable";
 import PairTable from "./PairTable";
@@ -8,6 +8,7 @@ import TeamTable from "./TeamTable";
 
 const Result: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [params] = useSearchParams();
   const { nameByID } = useMaster();
   const { contest } = useContest(id ?? "");
   if (nameByID === null || contest === null) return null;
@@ -23,6 +24,15 @@ const Result: React.FC = () => {
       }),
     ]),
   );
+  if (params.has("individual")) {
+    return (
+      <NormalTable
+        nameByID={nameByID}
+        players={contest.players}
+        pointsByID={pointsByID}
+      />
+    );
+  }
   if (contest.rule?.id === "team") {
     return (
       <TeamTable
