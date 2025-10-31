@@ -356,6 +356,155 @@ describe("<Result />", () => {
       ]);
     });
   });
+
+  describe("team", () => {
+    type Table = [
+      [
+        rank: string,
+        team: string,
+        name: string,
+        total: string,
+        subtotal: string,
+        round1: string,
+        round2: string,
+      ],
+      [name: string, subtotal: string, round1: string, round2: string],
+      [name: string, subtotal: string, round1: string, round2: string],
+      [name: string, subtotal: string, round1: string, round2: string],
+      [
+        rank: string,
+        team: string,
+        name: string,
+        total: string,
+        subtotal: string,
+        round1: string,
+        round2: string,
+      ],
+      [name: string, subtotal: string, round1: string, round2: string],
+      [name: string, subtotal: string, round1: string, round2: string],
+      [name: string, subtotal: string, round1: string, round2: string],
+    ];
+    type TestCase = [name: string, scores: Results, expected: Table];
+    it.each<TestCase>([
+      [
+        "開始",
+        [
+          [null, null],
+          [null, null],
+        ],
+        [
+          ["1", "team A", "player 1", "0.0", "0.0", "A", "A"],
+          ["player 2", "0.0", "A", "A"],
+          ["player 3", "0.0", "A", "B"],
+          ["player 4", "0.0", "A", "B"],
+          ["1", "team B", "player 5", "0.0", "0.0", "B", "A"],
+          ["player 6", "0.0", "B", "A"],
+          ["player 7", "0.0", "B", "B"],
+          ["player 8", "0.0", "B", "B"],
+        ],
+      ],
+      [
+        "途中",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30100, 20000, 9900],
+          ],
+          [[40000, 30000, 20000, 10000], null],
+        ],
+        [
+          ["1", "team A", "player 1", "45.0", "80.0", "40.0", "40.0"],
+          ["player 2", "10.0", "5.0", "5.0"],
+          ["player 3", "-15.0", "-15.0", "B"],
+          ["player 4", "-30.0", "-30.0", "B"],
+          ["2", "team B", "player 5", "-45.0", "25.0", "40.0", "-15.0"],
+          ["player 6", "-24.9", "5.1", "-30.0"],
+          ["player 7", "-15.0", "-15.0", "B"],
+          ["player 8", "-30.1", "-30.1", "B"],
+        ],
+      ],
+      [
+        "終了",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+          [
+            [40000, 29000, 21000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+        ],
+        [
+          ["1", "team A", "player 1", "89.0", "80.0", "40.0", "40.0"],
+          ["player 2", "9.0", "5.0", "4.0"],
+          ["player 3", "25.0", "-15.0", "40.0"],
+          ["player 4", "-25.0", "-30.0", "5.0"],
+          ["2", "team B", "player 5", "-89.0", "26.0", "40.0", "-14.0"],
+          ["player 6", "-25.0", "5.0", "-30.0"],
+          ["player 7", "-30.0", "-15.0", "-15.0"],
+          ["player 8", "-60.0", "-30.0", "-30.0"],
+        ],
+      ],
+      [
+        "同率",
+        [
+          [
+            [40000, 30000, 20000, 10000],
+            [40000, 30000, 20000, 10000],
+          ],
+          [
+            [30000, 20000, 30000, 20000],
+            [10000, 40000, 10000, 40000],
+          ],
+        ],
+        [
+          ["1", "team A", "player 1", "0.0", "57.5", "40.0", "17.5"],
+          ["player 2", "-12.5", "5.0", "-17.5"],
+          ["player 3", "-42.5", "-15.0", "-27.5"],
+          ["player 4", "-2.5", "-30.0", "27.5"],
+          ["1", "team B", "player 5", "0.0", "57.5", "40.0", "17.5"],
+          ["player 6", "-12.5", "5.0", "-17.5"],
+          ["player 7", "-42.5", "-15.0", "-27.5"],
+          ["player 8", "-2.5", "-30.0", "27.5"],
+        ],
+      ],
+    ])(`%s`, (_, scores, expected) => {
+      const contestBefore = structuredClone(contest);
+      scores.forEach((result, i) =>
+        result.forEach((table, j) => {
+          contestBefore.results[i][j].scores = table;
+        }),
+      );
+      contestBefore.rule = {
+        id: "team",
+        teams: [
+          { team: "team A", players: [1, 2, 3, 4] },
+          { team: "team B", players: [5, 6, 7, 8] },
+        ],
+        uma: [10, 5, -5, -10],
+      };
+      const sendSnapshot = mockOnSnapshot();
+      render(
+        <MemoryRouter initialEntries={["/result/hoge"]}>
+          <Routes>
+            <Route path="/result/:id" element={<Result />} />
+          </Routes>
+        </MemoryRouter>,
+      );
+      act(() => {
+        sendSnapshot["master"]({
+          players,
+          rules: [],
+        });
+      });
+      act(() => sendSnapshot["hoge"](contestBefore));
+      expect(getTable()).toEqual([
+        ["順位", "チーム", "名前", "合計", "小計", "1回戦", "2回戦"],
+        ...expected,
+      ]);
+    });
+  });
 });
 
 const players = [
