@@ -3,11 +3,11 @@ import { useParams } from "react-router";
 import { useContest } from "../contest";
 import { useMaster } from "../master";
 import { useState } from "react";
-import EditTable from ".//EditTables";
+import EditTable from "./EditTables";
 
 const EditContestV2 = () => {
   const { id } = useParams<{ id: string }>();
-  const { contest, mutateContest: mutate } = useContest(id ?? "");
+  const { contest, mutateContest: mutate, saveContest } = useContest(id ?? "");
   const { nameByID } = useMaster();
   const [value, setValue] = useState(0);
 
@@ -37,6 +37,7 @@ const EditContestV2 = () => {
             nameByID={nameByID}
             contest={contest}
             mutateContest={mutate}
+            saveContest={saveContest}
           />
         )}
         {value === 1 && <div>参加者一覧</div>}
