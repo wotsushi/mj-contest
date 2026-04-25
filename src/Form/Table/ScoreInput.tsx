@@ -8,6 +8,7 @@ type Props = {
 const ScoreInput: React.FC<Props> = ({ score, commit }) => {
   return (
     <Input
+      key={score === null ? "null" : "filled"}
       type="number"
       placeholder="持ち点"
       defaultValue={score ?? ""}
