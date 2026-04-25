@@ -5,6 +5,7 @@ import { useMaster } from "../master";
 import { useState } from "react";
 import EditTable from "./EditTables";
 import EditRule from "./EditRule";
+import EditPlayers from "./EditPlayers";
 
 const EditContestV2 = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,7 +42,14 @@ const EditContestV2 = () => {
             saveContest={saveContest}
           />
         )}
-        {value === 1 && <div>参加者一覧</div>}
+        {value === 1 && (
+          <EditPlayers
+            nameByID={nameByID}
+            contest={contest}
+            mutateContest={mutate}
+            saveContest={saveContest}
+          />
+        )}
         {value === 2 && (
           <EditRule
             rule={contest.rule}
