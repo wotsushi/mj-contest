@@ -29,9 +29,6 @@ const EditTables: React.FC<Props> = ({
   const players = Array.from(nameByID)
     .filter(([id]) => contest.players.includes(id))
     .map(([value, label]) => ({ value, label }));
-  const selectedInRound = new Set(
-    contest.results[round].flatMap((r) => r.players),
-  );
   return (
     <Box sx={{ gap: 2, display: "flex", flexDirection: "column" }}>
       <SelectBox
@@ -81,11 +78,7 @@ const EditTables: React.FC<Props> = ({
                   <SelectBox
                     key={j}
                     id={`player-${j}`}
-                    items={players.filter(
-                      (item) =>
-                        item.value === player ||
-                        !selectedInRound.has(item.value),
-                    )}
+                    items={players}
                     value={player}
                     onChange={(value) =>
                       mutateContest((next) => {
