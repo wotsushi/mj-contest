@@ -1,4 +1,10 @@
-import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from "@mui/material";
 import { Rule } from "../contest";
 
 type Props = {
@@ -21,6 +27,24 @@ const EditRule: React.FC<Props> = ({ rule, setRule, saveContest }) => {
         }
         label="同点時に折半する"
       />
+      <Box sx={{ display: "flex", gap: 1 }}>
+        {rule.uma.map((point, i) => (
+          <TextField
+            key={`${i}-${point}`}
+            label={`${i + 1}位`}
+            type="number"
+            defaultValue={point}
+            onBlur={(e) =>
+              setRule({
+                ...rule,
+                uma: rule.uma.map((p, j) =>
+                  j === i ? Number(e.target.value) : p,
+                ) as Rule["uma"],
+              })
+            }
+          />
+        ))}
+      </Box>
       <Button variant="contained" onClick={() => saveContest()}>
         保存
       </Button>
