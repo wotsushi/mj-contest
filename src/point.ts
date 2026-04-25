@@ -2,12 +2,15 @@ import { Rule } from "./contest";
 
 // https://m-league.jp/about/ の第6章 計算(収支および得点)の第2条 持ち点・順位点に準ずる
 export const calcPoints = (scores: number[], rule: Rule) => {
+  const splitTie = rule.splitTie ?? true;
   const kyotaku =
     totalInitialScore(scores.length) - scores.reduce((sum, s) => sum + s, 0);
   return scores.map((score, i) => {
-    const rank = scores.filter((s) => s > score).length;
-    const tie = scores.filter((s) => s === score).length;
-    const tieIdx = scores.slice(0, i).filter((s) => s === score).length;
+    const baseRank = scores.filter((s) => s > score).length;
+    const baseTieIdx = scores.slice(0, i).filter((s) => s === score).length;
+    const rank = splitTie ? baseRank : baseRank + baseTieIdx;
+    const tie = splitTie ? scores.filter((s) => s === score).length : 1;
+    const tieIdx = splitTie ? baseTieIdx : 0;
     const point = (score - returnScore) / 1000;
     const okaScore = rank === 0 ? (returnScore - initialScore) * 4 : 0;
     const umaScore =

@@ -4,6 +4,7 @@ import { useContest } from "../contest";
 import { useMaster } from "../master";
 import { useState } from "react";
 import EditTable from "./EditTables";
+import EditRule from "./EditRule";
 
 const EditContestV2 = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,7 +42,13 @@ const EditContestV2 = () => {
           />
         )}
         {value === 1 && <div>参加者一覧</div>}
-        {value === 2 && <div>ルール設定</div>}
+        {value === 2 && (
+          <EditRule
+            rule={contest.rule}
+            setRule={(rule) => mutate((next) => (next.rule = rule))}
+            saveContest={saveContest}
+          />
+        )}
       </Box>
     </Box>
   );

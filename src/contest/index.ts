@@ -17,6 +17,8 @@ export type Rule =
   | {
       id: "normal";
       uma: [number, number, number, number];
+      /** 同点時の順位点処理: 未指定 or true なら折半、false ならscores配列のindex昇順でタイブレーク */
+      splitTie?: boolean;
     }
   | PairRule
   | TeamRule;
@@ -25,6 +27,8 @@ export type PairRule = {
   id: "pair";
   pairs: Pair[];
   uma: [number, number, number, number];
+  /** 同点時の順位点処理: 未指定 or true なら折半、false ならscores配列のindex昇順でタイブレーク */
+  splitTie?: boolean;
 };
 
 export type Pair = {
@@ -36,6 +40,8 @@ export type TeamRule = {
   id: "team";
   teams: Team[];
   uma: [number, number, number, number];
+  /** 同点時の順位点処理: 未指定 or true なら折半、false ならscores配列のindex昇順でタイブレーク */
+  splitTie?: boolean;
 };
 
 export type Team = {

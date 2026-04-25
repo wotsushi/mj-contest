@@ -97,4 +97,34 @@ describe("calcPoints", () => {
   ])(`scores=%p uma=%p expected=%p`, (scores, uma, expected) => {
     expect(calcPoints(scores, { id: "normal", uma })).toEqual(expected);
   });
+
+  describe("splitTie: false", () => {
+    type TestCase = [scores: number[], uma: Rule["uma"], expected: number[]];
+    it.each<TestCase>([
+      [
+        [18000, 30000, 30000, 22000],
+        [10, 5, -5, -10],
+        [-22, 30, 5, -13],
+      ],
+      [
+        [30000, 30000, 20000, 20000],
+        [10, 5, -5, -10],
+        [30, 5, -15, -20],
+      ],
+      [
+        [25000, 25000, 25000, 25000],
+        [10, 5, -5, -10],
+        [25, 0, -10, -15],
+      ],
+      [
+        [40000, 30000, 20000, 10000],
+        [10, 5, -5, -10],
+        [40, 5, -15, -30],
+      ],
+    ])(`scores=%p uma=%p expected=%p`, (scores, uma, expected) => {
+      expect(
+        calcPoints(scores, { id: "normal", uma, splitTie: false }),
+      ).toEqual(expected);
+    });
+  });
 });
