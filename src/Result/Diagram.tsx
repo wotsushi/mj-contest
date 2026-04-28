@@ -9,10 +9,10 @@ type Props = {
 const tableNames = ["A", "B", "C", "D"];
 const tableColors = ["red", "orange", "blue", "green"];
 const positions = [
-  { cx: 200, cy: 500 }, // A
-  { cx: 800, cy: 500 }, // B
-  { cx: 800, cy: 200 }, // C
-  { cx: 200, cy: 200 }, // D
+  { cx: 200, cy: 530 }, // A
+  { cx: 800, cy: 530 }, // B
+  { cx: 800, cy: 260 }, // C
+  { cx: 200, cy: 260 }, // D
 ];
 const halfWidth = 130;
 const halfHeight = 80;
@@ -24,14 +24,14 @@ const Diagram: React.FC<Props> = ({ nameByID, contest }) => {
   const tables = nextRound >= 0 ? contest.results[nextRound] : [];
   return (
     <Wrapper>
-      <svg viewBox="0 0 1000 700" width="100%" height="100%">
+      <Svg viewBox="0 0 1000 700">
         {nextRound >= 0 && (
           <text
-            x="20"
-            y="50"
+            x="0"
+            y="60"
             textAnchor="start"
             dominantBaseline="middle"
-            fontSize="36"
+            fontSize="52"
             fontWeight="bold"
             fill="#333"
           >
@@ -75,7 +75,7 @@ const Diagram: React.FC<Props> = ({ nameByID, contest }) => {
             />
           );
         })}
-      </svg>
+      </Svg>
     </Wrapper>
   );
 };
@@ -119,7 +119,7 @@ const DiamondTable: React.FC<DiamondProps> = ({
         x={cx - halfWidth * 0.4}
         y={cy - halfHeight + 15}
         textAnchor="end"
-        fontSize="32"
+        fontSize="44"
         fill="#333"
       >
         {players[0]}
@@ -128,7 +128,7 @@ const DiamondTable: React.FC<DiamondProps> = ({
         x={cx + halfWidth * 0.4}
         y={cy - halfHeight + 15}
         textAnchor="start"
-        fontSize="32"
+        fontSize="44"
         fill="#333"
       >
         {players[1]}
@@ -137,7 +137,7 @@ const DiamondTable: React.FC<DiamondProps> = ({
         x={cx + halfWidth * 0.4}
         y={cy + halfHeight + 5}
         textAnchor="start"
-        fontSize="32"
+        fontSize="44"
         fill="#333"
       >
         {players[2]}
@@ -146,7 +146,7 @@ const DiamondTable: React.FC<DiamondProps> = ({
         x={cx - halfWidth * 0.4}
         y={cy + halfHeight + 5}
         textAnchor="end"
-        fontSize="32"
+        fontSize="44"
         fill="#333"
       >
         {players[3]}
@@ -159,6 +159,13 @@ const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: #fff;
+  overflow: hidden;
+`;
+
+const Svg = styled.svg`
+  display: block;
+  width: 100%;
+  height: 100%;
 `;
 
 export default Diagram;
