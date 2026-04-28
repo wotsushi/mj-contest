@@ -95,26 +95,38 @@ const Table: React.FC<Props> = ({
       )}
       <button
         type="button"
+        disabled={!showPoints && !allCleared}
+        onClick={saveScores}
+      >
+        保存
+      </button>
+      <ResetButton
+        type="button"
         onClick={() => {
           setDraftScores(scores.map(() => null));
           setScores(null);
         }}
       >
         リセット
-      </button>
-      <button
-        type="button"
-        disabled={!showPoints && !allCleared}
-        onClick={saveScores}
-      >
-        保存
-      </button>
+      </ResetButton>
     </Root>
   );
 };
 
 const Root = styled.div`
   font-size: 24px;
+`;
+
+const ResetButton = styled.button`
+  display: block;
+  margin: 32px auto 0;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #888;
+  background: transparent;
+  border: none;
+  text-decoration: underline;
 `;
 
 const Th = styled.th`
